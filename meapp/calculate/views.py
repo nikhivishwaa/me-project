@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
+import json
 
 def home(request):
     if not request.user.is_authenticated:
@@ -62,6 +63,21 @@ def register(request):
                 return redirect('login')
 
     return render(request, 'login.html', context = {'page':'signup'}) 
+
+def logoutuser(request):
+    if request.user.is_authenticated():
+        logout(request)
+    return redirect('login')
+
+def profile(request):
+    if request.user.is_authenticated:
+        user = {
+                'username' : request.user.username,
+                'email' : request.user.email,
+                'firstname' : request.user.first_name,
+                'lastname' : request.user.last_name
+            }
+        return HttpResponse(json.dumps(user), content_type='application/json')
 
     
 def userauth(request):

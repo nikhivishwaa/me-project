@@ -6,4 +6,6 @@ urlpatterns = [
     path('heat/', views.HeatCalculationViewSet.as_view({'post':'create'}), name='heat calculation'),
     path('signup/', views.register, name='signup'),
     path('login/', views.userauth, name='login'),
+    path('logout/', views.logoutuser, name='logout'),
+    path('profile/', views.profile, name='profile'),
 ]
