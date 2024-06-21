@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+<!-- {% load static %} -->
+
+{% block head %}<title>User Login</title>{% endblock %}
+
+{% block header %}
+<div class="h-[42px]"></div>
+{% endblock %}
+
+{% block body %}
+<div class="wrapper">
+  <div class="title-text">
+    <div class="title login">Login Form</div>
+    <div class="title signup">Signup Form</div>
+  </div>
+  <div class="form-container">
+    <div class="slide-controls">
+      <input type="radio" name="slide" id="login" checked>
+      <input type="radio" name="slide" id="signup">
+      <label id="loginForm" for="login" class="slide login">Login</label>
+      <label id="signupForm" for="signup" class="slide signup">Signup</label>
+      <div class="slider-tab"></div>
+    </div>
+    <div class="form-inner">
+      <form method="post" action="{% url 'login' %}" class="login">
+        {% csrf_token %}
+        <pre>
+              </pre>
+        <div class="field">
+          <input type="text" placeholder="Email Address" name="email" id="lemail" required>
+        </div>
+        <div class="field">
+          <input type="password" placeholder="Password" name="password" id="lpassword" required>
+        </div>
+        <div class="pass-link"><a href="#">Forgot password?</a></div>
+        <div class="field btn">
+          <div class="btn-layer"></div>
+          <input type="submit" value="Login">
+        </div>
+        <div id="signupForm" class="signup-link">Create an account <a href="/">Signup now</a></div>
+      </form>
+      <form action="{% url 'signup' %}" method="post" class="signup">
+        {% csrf_token %}
+        <div class="field">
+          <input id="fname" name="firstname" type="text" placeholder="First Name" required>
+        </div>
+        <div class="field">
+          <input id="lname" name="lastname" type="text" placeholder="Last Name">
+        </div>
+        <div class="field">
+          <input id="email" name="email" type="text" placeholder="Email Address" required>
+        </div>
+        <div class="field">
+          <input type="password" name="password" id="password" placeholder="Password" required>
+        </div>
+        <div class="field">
+          <input type="password" name="repassword" id="repassword" placeholder="Confirm password" required>
+        </div>
+        <div class="field btn">
+          <div class="btn-layer"></div>
+          <input type="submit" value="Signup">
+        </div>
+        <div id="loginForm" class="login-link">Already have an account? <a href="/signup">Login</a></div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block footer %}
+<div class="h-[42px]"></div>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/script.js' %}"></script>
+<script>
+  const page = '{{page}}';
+  if (page === 'login') {
+    $('label.login').click()
+  }
+  else{
+  $('label.signup').click()
+}
+</script>
+{% endblock %}
