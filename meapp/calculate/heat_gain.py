@@ -111,7 +111,7 @@ class HeatGainFromEquipments:
     def __init__(self, equipments:dict)->None:
             self.equipments = equipments
             self.power = {'computer':200,
-                          'led tubelight':20,
+                          'led_tubelight':20,
                           'fans':75}
 
     @property
@@ -160,7 +160,7 @@ if __name__ == '__main__':
          'roof':{"area":74, "temperature":30},
          'occupants':32,
          'equipments':{'computer':32,
-                          'led tubelight':15,
+                          'led_tubelight':15,
                           'fans':6}}
 
     y = TotalHeatLoad(x)

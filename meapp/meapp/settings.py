@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 ]
 
 EXTERNAL_APPS = ['calculate',
+                 'home',
                  'rest_framework',
 ]
 

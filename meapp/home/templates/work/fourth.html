@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formula Calculator</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.calculator {
+  width: 300px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+label {
+  margin-bottom: 5px;
+  display: inline-block;
+  width: 50px;
+}
+
+input[type="number"] {
+  width: 100px;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+#result {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+</style>
+<body>
+  <div class="calculator">
+    <h2>Formula Calculator</h2>
+    <form id="calcForm">
+      <label for="inputA">A:</label>
+      <input type="number" id="inputA" required>
+      <br>
+      <label for="inputB">B:</label>
+      <input type="number" id="inputB" required>
+      <br>
+      <label for="inputDt">∆t:</label>
+      <input type="number" id="inputDt" required>
+      <br>
+      <label for="inputD">D:</label>
+      <input type="number" id="inputD" required>
+      <br><br>
+      <button type="button" onclick="calculate()">Calculate</button>
+    </form>
+    <div id="result"></div>
+  </div>
+  <script >
+    function calculate() {
+  // Get input values
+  let A = parseFloat(document.getElementById('inputA').value);
+  let B = parseFloat(document.getElementById('inputB').value);
+  let dt = parseFloat(document.getElementById('inputDt').value);
+  let D = parseFloat(document.getElementById('inputD').value);
+
+  // Perform calculation
+  let result = (A * B * dt) / D;
+
+  // Display result
+  document.getElementById('result').innerText = `Result: ${result}`;
+}
+
+  </script>
+</body>
+</html>

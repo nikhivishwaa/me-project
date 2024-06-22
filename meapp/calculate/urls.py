@@ -2,10 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    path('heat/', views.HeatCalculationViewSet.as_view({'post':'create'}), name='heat calculation'),
-    path('signup/', views.register, name='signup'),
-    path('login/', views.userauth, name='login'),
-    path('logout/', views.logoutuser, name='logout'),
-    path('profile/', views.profile, name='profile'),
+    # path('', views.HeatCalculationViewSet.as_view({'post':'create'}), name='heat calculation'),
+    path('', views.HeatCalculation, name='heat calculation fn'),
 ]
