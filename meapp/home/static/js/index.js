@@ -130,7 +130,7 @@ async function getheatload(json_data = {}) {
       body: JSON.stringify(json_data),
     };
     const response = await fetch(
-      "http://127.0.0.1:8000/api/calculation/",
+      "/api/calculation/",
       options
     );
     const movies = await response.json();
