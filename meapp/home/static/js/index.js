@@ -102,21 +102,21 @@ async function CHGEquipments() {
 }
 
 async function CHGTotal() {
-  document.getElementById("walls-total").value = total.walls.total_heat_load || ''
-  document.getElementById("window-total").value = total.windows.total_heat_load || ''
-  document.getElementById("roof-total").value = total.roof.total_heat_load || ''
-  document.getElementById("occupants-total").value = total.occupants.total_heat_load || ''
-  document.getElementById("computers-total").value = total.equipments.total_heat_load || ''
-  document.getElementById("lights-total").value = total.equipments.total_heat_load || ''
-  document.getElementById("fans-total").value = total.equipments.total_heat_load || ''
+  document.getElementById("walls-total").value = total.walls?.total_heat_load || '0 W'
+  document.getElementById("window-total").value = total.windows?.total_heat_load || '0 W'
+  document.getElementById("roof-total").value = total.roof?.total_heat_load || '0 W'
+  document.getElementById("occupants-total").value = total.occupants?.total_heat_load || '0 W'
+  document.getElementById("computers-total").value = total.equipments?.total_heat_load || '0 W'
+  document.getElementById("lights-total").value = total.equipments?.total_heat_load || '0 W'
+  document.getElementById("fans-total").value = total.equipments?.total_heat_load || '0 W'
   
   request_array = { walls, windows, roof, occupants, equipments };
   console.log(request_array);
-  total.total = await getheatload({total})
+  total.total = await getheatload(request_array)
 
   document.getElementById("result").innerHTML = `
-        <p>Total Heat Gain: ${total.total?.total_heat_load}</p>
-        <p>Tonnage Required: ${total.total?.air_conditioning}</p>
+        <p>Total Heat Gain: ${total.total.total_heat_load}</p>
+        <p>Tonnage Required: ${total.total.air_conditioning}</p>
     `;
 }
 
