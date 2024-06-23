@@ -2,17 +2,16 @@
 
 <!-- {% load static %} -->
 
-{% block head %}<title>User Login</title>{% endblock %}
+{% block head %}<title>Login: CHG features are only be accessible after login in to your account</title>{% endblock %}
 
 {% block header %}
 <div class="h-[42px]"></div>
 {% endblock %}
 
 {% block body %}
-<div class="wrapper">
+<div class="wrapper w-[450px]">
   <div class="title-text">
-    <div class="title login">Login Form</div>
-    <div class="title signup">Signup Form</div>
+    <div class="title login">Login to CHG</div>
   </div>
   <div class="form-container">
     <div class="slide-controls">
@@ -25,22 +24,27 @@
     {% if messages %}
     <section class="messages mt-1">
       {% for message in messages %}
-        <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible rounded-[6px] py-[8px] fade show" role="alert">
-          <strong>{{ message.tags|capfirst }} :</strong> {{ message }}
-          <button type="button" class="btn-close" style="padding-top: 8px !important;" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endfor %}
+      <div
+        class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible rounded-[6px] py-[8px] pt-[14px] fade show"
+        role="alert">
+        <strong>{{ message.tags|capfirst }} :</strong> {{ message }}
+        <button type="button" class="btn-close" style="padding-top: 8px !important;" data-bs-dismiss="alert"
+          aria-label="Close"></button>
+      </div>
+      {% endfor %}
     </section>
     {% endif %}
     <div class="form-inner">
-      <form method="post" action="{% url 'login' %}" class="login">
+      <form method="post" action="{% url 'login' %}" class="login" onsubmit="return checkLoginForm()">
         {% csrf_token %}
 
         <div class="field">
           <input type="text" placeholder="Email Address" name="email" id="lemail" required>
+          <span class="block text-[12px] font-medium py-1 px-[10px] text-[red]" id="email_error"></span>
         </div>
         <div class="field">
           <input type="password" placeholder="Password" name="password" id="lpassword" required>
+          <span class="block text-[12px] font-medium py-1 px-[10px] text-[red]" id="password_error"></span>
         </div>
         <div class="pass-link"><a href="#">Forgot password?</a></div>
         <div class="field btn">
@@ -48,29 +52,6 @@
           <input type="submit" value="Login">
         </div>
         <div id="signupForm" class="signup-link">Create an account <a href="/">Signup now</a></div>
-      </form>
-      <form action="{% url 'signup' %}" method="post" class="signup">
-        {% csrf_token %}
-        <div class="field">
-          <input id="fname" name="firstname" type="text" placeholder="First Name" required>
-        </div>
-        <div class="field">
-          <input id="lname" name="lastname" type="text" placeholder="Last Name">
-        </div>
-        <div class="field">
-          <input id="email" name="email" type="text" placeholder="Email Address" required>
-        </div>
-        <div class="field">
-          <input type="password" name="password" id="password" placeholder="Password" required>
-        </div>
-        <div class="field">
-          <input type="password" name="repassword" id="repassword" placeholder="Confirm password" required>
-        </div>
-        <div class="field btn">
-          <div class="btn-layer"></div>
-          <input type="submit" value="Signup">
-        </div>
-        <div id="loginForm" class="login-link">Already have an account? <a href="/signup">Login</a></div>
       </form>
     </div>
   </div>
@@ -84,13 +65,50 @@
 
 {% block script %}
 <script src="{% static 'js/script.js' %}"></script>
+<script src="{% static 'js/validators.js' %}"></script>
 <script>
-  const page = '{{page}}';
-  if (page === 'login') {
-    $('label.login').click()
-  }
-  else {
-    $('label.signup').click()
+
+  function checkLoginForm(x) {
+    console.log("checking login form");
+    let email = document.getElementById('lemail');
+    let password = document.getElementById('lpassword');
+    let email_error = document.getElementById('email_error');
+    let password_error = document.getElementById('password_error');
+    let flags = [false, false]
+
+    if (!email.value) {
+      email.style.borderColor = 'Red';
+      flags[0] = false;
+      email_error.innerHTML = "Please enter email";
+    }
+    else if (!email_validator(email.value)) {
+      email.style.borderColor = 'Red';
+      flags[0] = false;
+      email_error.innerHTML = "Please enter a valid email address";
+    }
+    else {
+      email.style.borderColor = 'green';
+      email_error.innerHTML = "";
+      flags[0] = true;
+    }
+
+    if (password.value) {
+      password.style.borderColor = 'Red';
+      flags[1] = false;
+      password_error.innerHTML = "Please enter password";
+    }
+
+    if (password.value.length < 8) {
+      password.style.borderColor = 'Red';
+      password_error.innerHTML = "Password must be 8 character long";
+      flags[1] = false;
+    }
+    else {
+      password.style.borderColor = 'green';
+      password_error.innerHTML = "";
+      flags[1] = true;
+    }
+    return flags[0] && flags[1] ;
   }
 </script>
 {% endblock %}
