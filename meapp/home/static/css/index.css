@@ -161,24 +161,11 @@ form .btn {
   border-radius: 15px;
   padding: 0px 10px;
 }
-/* form .btn .btn-layer {
-  height: 100%;
-  width: 300%;
-  position: absolute;
-  left: -100%;
-  background: -webkit-linear-gradient(
-    right,
-    #003366,
-    #004080,
-    #0059b3,
-    #0073e6
-  );
-  border-radius: 15px;
-  transition: all 0.4s ease;
-  } */
-form .btn:hover .btn-layer {
-  left: 0;
+
+form .btn input[type="submit"]:hover {
+  opacity: 1;
 }
+
 form .btn input[type="submit"] {
   height: 44px;
   border-radius: 12px;
@@ -196,6 +183,7 @@ form .btn input[type="submit"] {
   font-size: 20px;
   font-weight: 500;
   cursor: pointer;
+  opacity: 0.93;
   transition: all 0.4s ease;
 }
 
