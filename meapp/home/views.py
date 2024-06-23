@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.db import IntegrityError
 from .validation.signup import signup_request_validation
 from . import validators
-from .helper import create_user
+from .helper import create_user, send_email_to_client
 import json
 import random as rd
 
@@ -31,7 +31,8 @@ def register(request):
             else:
                 username = d['email'].split('@')[0].replace('.','_')
                 try:
-                    create_user(d, username)
+                    user = create_user(d, username)
+                    send_email_to_client(user.email)
                     messages.success(request, "Account Created. Now you can Login")
 
                 except IntegrityError:

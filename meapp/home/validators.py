@@ -16,16 +16,16 @@ def validate_email(email:str)->bool:
     return True
 
 def validate_password(password:str)->bool:
-    pattern1 = '^[a-zA-Z0-9\@\$\^\(\)\?\~\.\/]{8,30}$'
+    pattern1 = r'^[a-zA-Z0-9\@\$\^\(\)\?\~\.\/]{8,30}$'
     isvalid = re.search(pattern1, password)
 
     if isvalid is None:
         return False
 
-    pattern2 = '[A-Z]+'
-    pattern3 = '[a-z]+'
-    pattern4 = '[0-9]+'
-    pattern5 = '[\@\$\^\(\)\?\~\.\/\&\*\+\-]+'
+    pattern2 = r'[A-Z]+'
+    pattern3 = r'[a-z]+'
+    pattern4 = r'[0-9]+'
+    pattern5 = r'[\@\$\^\(\)\?\~\.\/\&\*\+\-]+'
 
     if re.search(pattern2, password) is None:
         return False
