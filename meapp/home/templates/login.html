@@ -22,11 +22,20 @@
       <label id="signupForm" for="signup" class="slide signup">Signup</label>
       <div class="slider-tab"></div>
     </div>
+    {% if messages %}
+    <section class="messages mt-1">
+      {% for message in messages %}
+        <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible rounded-[6px] py-[8px] fade show" role="alert">
+          <strong>{{ message.tags|capfirst }} :</strong> {{ message }}
+          <button type="button" class="btn-close" style="padding-top: 8px !important;" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </section>
+    {% endif %}
     <div class="form-inner">
       <form method="post" action="{% url 'login' %}" class="login">
         {% csrf_token %}
-        <pre>
-              </pre>
+
         <div class="field">
           <input type="text" placeholder="Email Address" name="email" id="lemail" required>
         </div>
@@ -80,8 +89,8 @@
   if (page === 'login') {
     $('label.login').click()
   }
-  else{
-  $('label.signup').click()
-}
+  else {
+    $('label.signup').click()
+  }
 </script>
 {% endblock %}
