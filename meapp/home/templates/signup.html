@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-<!-- {% load static %} -->
+{% load static %}
 
 {% block head %}<title>Signup: Create account with CHG to access premium features</title>{% endblock %}
 
@@ -37,28 +37,32 @@
             <form action="{% url 'signup' %}" method="post" class="signup" onsubmit="return checkSignupForm()">
                 {% csrf_token %}
                 <div class="field">
-                    <input id="fname" name="firstname" type="text" placeholder="First Name" required>
+                    <input id="fname" name="firstname" type="text" value="{{first_name}}" placeholder="First Name"
+                        required>
                     <span class="block text-[12px] font-medium py-1 px-[10px] text-[red]" id="fname_error"></span>
-                    
+
                 </div>
                 <div class="field">
-                    <input id="lname" name="lastname" type="text" placeholder="Last Name">
+                    <input id="lname" name="lastname" type="text" value="{{last_name}}" placeholder="Last Name">
                     <span class="block text-[12px] font-medium py-1 px-[10px] text-[red]" id="lname_error"></span>
                 </div>
                 <div class="field">
-                    <input id="email" name="email" type="text" placeholder="Email Address" required>
+                    <input id="email" name="email" type="email" value="{{email}}" placeholder="Email Address" required>
                     <span class="block text-[12px] font-medium py-1 px-[10px] text-[red]" id="email_error"></span>
                 </div>
-                <div class="field">
+                <div class="field relative">
+                    <img src="{% static 'image/openeye.png' %}" class="password-btn" alt="show"
+                        onclick="showpassword('password', this)">
                     <input type="password" name="password" id="password" placeholder="Password" required>
                     <span class="block text-[12px] font-medium py-1 px-[10px] text-[red]" id="password_error"></span>
                 </div>
-                <div class="field">
+                <div class="field relative">
+                    <img src="{% static 'image/openeye.png' %}" class="password-btn" alt="show"
+                        onclick="showpassword('repassword', this)">
                     <input type="password" name="repassword" id="repassword" placeholder="Confirm password" required>
                     <span class="block text-[12px] font-medium py-1 px-[10px] text-[red]" id="repassword_error"></span>
                 </div>
                 <div class="field btn">
-                    <!-- <div class="btn-layer"></div> -->
                     <input type="submit" value="Signup">
                 </div>
                 <div id="loginForm" class="login-link">Already have an account? <a href="/login">Login</a></div>
@@ -77,6 +81,11 @@
 <script src="{% static 'js/script.js' %}"></script>
 <script src="{% static 'js/validators.js' %}"></script>
 <script>
+    function showpassword(id, x) {
+        let passwordfield = document.querySelector(`input[id="${id}"]`)
+        passwordfield.type = passwordfield.type === 'password' ? 'text' : 'password';
+        x.src = x.src.endsWith("/openeye.png") ? "{% static 'image/closeeye.png' %}" : "{% static 'image/openeye.png' %}";
+    }
 
     function checkSignupForm() {
         console.log("checking login form");
@@ -114,12 +123,12 @@
         // check last name if given
         if (lname.value.length) {
             let last_name = lname.value.trim()
-            if (last_name.search(/^[a-z\sA-Z]{3,}$/) !== 0 || last_name.search(/\s{2,}/) !== -1) {
+            if (last_name.search(/^[a-z\sA-Z]{2,}$/) !== 0 || last_name.search(/\s{2,}/) !== -1) {
                 lname.style.borderColor = 'Red';
                 flags[1] = false;
                 lname_error.innerHTML = "Remove extra spaces or number from Last Name";
             }
-            
+
             else {
                 lname.style.borderColor = 'green';
                 lname_error.innerHTML = "";

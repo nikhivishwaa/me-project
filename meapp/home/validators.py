@@ -1,6 +1,6 @@
 import re
 
-def validate_email(email):
+def validate_email(email:str)->bool:
     pattern1 = r'[\.\@\-]{2,}'
     isvalid = re.search(pattern1, email)
 
@@ -14,3 +14,43 @@ def validate_email(email):
         return False
 
     return True
+
+def validate_password(password:str)->bool:
+    pattern1 = '^[a-zA-Z0-9\@\$\^\(\)\?\~\.\/]{8,30}$'
+    isvalid = re.search(pattern1, password)
+
+    if isvalid is None:
+        return False
+
+    pattern2 = '[A-Z]+'
+    pattern3 = '[a-z]+'
+    pattern4 = '[0-9]+'
+    pattern5 = '[\@\$\^\(\)\?\~\.\/\&\*\+\-]+'
+
+    if re.search(pattern2, password) is None:
+        return False
+    if re.search(pattern3, password) is None:
+        return False
+    if re.search(pattern4, password) is None:
+        return False
+    if re.search(pattern5, password) is None:
+        return False
+
+    return True
+
+def validate_first_name(first_name:str)->bool:
+    if first_name.isalpha() and len(first_name) >= 3:
+        return True
+
+    return False
+def validate_last_name(last_name:str)->bool:
+    if last_name.isalpha():
+        return True
+    
+    pattern1 = r'\s{2,}'
+    pattern2 = r'^[a-z\s]{3,}$'
+    if re.search(pattern1, last_name) is None and re.search(pattern2, last_name) is not None:
+        return True
+
+    return False
+

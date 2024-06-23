@@ -219,3 +219,12 @@ form .btn input[type="submit"] {
   height: 55vh;
   width: 55vh;
 }
+
+.password-btn{
+  position: absolute;
+  width: 31px;
+  right: 10px;
+  top: 10px;
+  mix-blend-mode: darken;
+  opacity: 0.7;
+}

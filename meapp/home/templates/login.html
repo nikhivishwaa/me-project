@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-<!-- {% load static %} -->
+{% load static %}
 
 {% block head %}<title>Login: CHG features are only be accessible after login in to your account</title>{% endblock %}
 
@@ -42,7 +42,9 @@
           <input type="text" placeholder="Email Address" name="email" id="lemail" required>
           <span class="block text-[12px] font-medium py-1 px-[10px] text-[red]" id="email_error"></span>
         </div>
-        <div class="field">
+        <div class="field relative">
+          <img src="{% static 'image/openeye.png' %}" class="password-btn" alt="show"
+            onclick="showpassword('lpassword', this)">
           <input type="password" placeholder="Password" name="password" id="lpassword" required>
           <span class="block text-[12px] font-medium py-1 px-[10px] text-[red]" id="password_error"></span>
         </div>
@@ -67,6 +69,12 @@
 <script src="{% static 'js/script.js' %}"></script>
 <script src="{% static 'js/validators.js' %}"></script>
 <script>
+
+  function showpassword(id, x) {
+    let passwordfield = document.querySelector(`input[id="${id}"]`)
+    passwordfield.type = passwordfield.type === 'password' ? 'text' : 'password';
+    x.src = x.src.endsWith("/openeye.png") ? "{% static 'image/closeeye.png' %}" : "{% static 'image/openeye.png' %}";
+  }
 
   function checkLoginForm(x) {
     console.log("checking login form");
@@ -108,7 +116,7 @@
       password_error.innerHTML = "";
       flags[1] = true;
     }
-    return flags[0] && flags[1] ;
+    return flags[0] && flags[1];
   }
 </script>
 {% endblock %}

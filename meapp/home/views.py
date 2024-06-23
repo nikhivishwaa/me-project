@@ -5,47 +5,45 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db import IntegrityError
+from .validation.signup import signup_request_validation
 from . import validators
+from .helper import create_user
 import json
+import random as rd
+
 
 @login_required(login_url="/login")
-def home(request):
-    return render(request,'home.html', context={'walls': range(1,5)})
+def dashboard(request):
+    return render(request,'dashboard.html', context={'walls': range(1,5)})
 
 def register(request):
     if request.method == 'POST':
-        email = request.POST.get('email', '').lower()
-        password = request.POST.get('password', '')
-        firstname = request.POST.get('firstname', '')
-        lastname = request.POST.get('lastname', '')
-
-        if email and password and firstname:
-            if not validators.validate_email(email):
-                messages.error(request, "Invalid Email Address")
-                return render(request, 'signup.html', context = {'page':'signup'})
-            
-            user = User.objects.filter(email=email)
+        
+        formdata = signup_request_validation(request)
+        if formdata['isvalid']:  
+            d = formdata['data']          
+            user = User.objects.filter(email=d['email'])
             if user.exists():
                 messages.error(request, "User already exist")
-                return render(request, 'signup.html', context = {'page':'signup'})
+                return redirect('signup')
 
             else:
-                username = email.split('@')[0].replace('.','_')
-                newuser = User.objects.create_user(username = username, 
-                                                    email = email, 
-                                                    first_name = firstname.strip(), 
-                                                    last_name = lastname.strip())
+                username = d['email'].split('@')[0].replace('.','_')
+                try:
+                    create_user(d, username)
+                    messages.success(request, "Account Created. Now you can Login")
 
-                newuser.set_password(password)
-                print('User created', newuser)
-                newuser.save()
-                messages.success(request, "Account Created. Now you can Login")
-                return render(request, 'signup.html', context = {'page':'signup'})
+                except IntegrityError:
+                    username += f'{rd.randint(123,4562) + abs(rd.randint(123,4562) - 1954)}'
+                    create_user(d, username)
+                    messages.success(request, "Account Created. Now you can Login")
+        
+                return redirect('signup')
         else:
-            messages.error(request, "Please fill all the required fields")
-            return render(request, 'signup.html', context = {'page':'signup'})
+            return render(request, 'signup.html', context = formdata['data'])
 
-    return render(request, 'signup.html', context = {'page':'signup'}) 
+    return render(request, 'signup.html') 
 
 def logoutuser(request):
     logout(request)
@@ -79,7 +77,7 @@ def userauth(request):
                 print('user', user)
                 if user is not None:
                     login(request, user)
-                    return redirect('/')
+                    return redirect('/dashboard')
 
                 else:
                     messages.error(request, "Invalid Credentials")
