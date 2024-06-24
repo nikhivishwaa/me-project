@@ -1,0 +1,124 @@
+{% extends 'home/base.html' %}
+
+{% load static %}
+
+{% block head %}
+
+<title>CHG- Landing Page Start Your Journey with us</title>
+<link rel="stylesheet" href="{% static 'home/css/style.css' %}">
+<style>
+  .tag1 {
+    /* border: 2px solid white; */
+    border-radius: 15px;
+    /* background-color: #66CDAA;  */
+    width: 120vh;
+    margin-left: 44vh;
+    opacity: 0.5;
+  }
+
+  h1.h1-customized {
+    /* color: blue; */
+    font-size: 5em;
+    font-weight: 800;
+    text-shadow: 1px 4px 6px grey, 0 0 0 #000, 1px 4px 6px grey
+  }
+
+  h2.h2-customized {
+    /* color: white; */
+    font-size: 3em;
+    font-weight: 800;
+    text-shadow: 1px 4px 6px grey, 0 0 0 #000, 1px 4px 6px grey
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+
+<header class="main-header">
+  <div class="header-wrapper">
+    <div class="main-logo">ⒸⒽⒼ</div>
+    <nav>
+      <ul class="main-menu">
+        <li><a href="#section-2">CHGWalls</a></li>
+        <li><a href="#section-5">CHGWindows</a></li>
+        <li><a href="#section-7">CHGR</a></li>
+        <li><a href="#section-9">CHGO</a></li>
+        <li><a href="#main-footer">CHGE</a></li>
+        <li><a href="#"><span class="fa fa-shopping-cart"></span></a></li>
+        <li><a href="#"><span class="fa fa-search"></span></a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<section id="section-1">
+  <div class="content-slider">
+    <input type="radio" id="banner1" class="sec-1-input" name="banner" checked>
+    <input type="radio" id="banner2" class="sec-1-input" name="banner">
+    <input type="radio" id="banner3" class="sec-1-input" name="banner">
+    <input type="radio" id="banner4" class="sec-1-input" name="banner">
+    <div class="slider">
+      <div id="top-banner-1" class="banner">
+        <div class="banner-inner-wrapper">
+          <div class="tag1">
+            <h2 class="h2-customized">Inovative Calculator</h2>
+            <h1 class="h1-customized">Welcome<br>to CHG</h1>
+            <div class="line"></div>
+          </div><br>
+          <div class="learn-more-button"><a href="#section-2">Learn More</a></div>
+        </div>
+      </div>
+
+      <div id="top-banner-2" class="banner">
+        <div class="banner-inner-wrapper">
+          <div class="tag1">
+            <h2 class="h2-customized">What We Do</h2>
+            <h1 class="h1-customized">GREAT<br>CHG</h1>
+            <div class="line"></div>
+          </div><br>
+          <div class="learn-more-button"><a href="#section-4">Learn More</a></div>
+        </div>
+      </div>
+
+      <div id="top-banner-3" class="banner">
+        <div class="banner-inner-wrapper">
+          <div class="tag1">
+            <h2 class="h2-customized">Here We Are</h2>
+            <h1 class="h1-customized">WE Are<br>CHG</h1>
+            <div class="line"></div>
+          </div><br>
+          <div class="learn-more-button"><a href="#section-6">Learn More</a></div>
+        </div>
+      </div>
+
+      <div id="top-banner-4" class="banner">
+        <div class="banner-inner-wrapper">
+          <div class="tag1">
+            <h2 class="h2-customized">Our Contacts</h2>
+            <h1 class="h1-customized">AI&DS<br>...</h1>
+            <div class="line"></div>
+          </div><br>
+          <div class="learn-more-button"><a href="#main-footer">Learn More</a></div>
+        </div>
+      </div>
+    </div>
+
+    <nav>
+      <div class="controls">
+        <label for="banner1"><span class="progressbar"><span class="progressbar-fill"></span></span><span>01</span>
+          Intro</label>
+        <label for="banner2"><span class="progressbar"><span class="progressbar-fill"></span></span><span>02</span>
+          Blog</label>
+        <label for="banner3"><span class="progressbar"><span class="progressbar-fill"></span></span><span>03</span>
+          About</label>
+        <label for="banner4"><span class="progressbar"><span class="progressbar-fill"></span></span><span>04</span>
+          Contacts</label>
+      </div>
+    </nav>
+  </div>
+</section>
+{% endblock %}
+
+{% block script %}
+
+<script src="{% static 'home/js/script.js' %}"></script>
+{% endblock %}

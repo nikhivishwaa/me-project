@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'accounts/base.html' %}
 
 {% load static %}
 
@@ -37,29 +37,35 @@
             <form action="{% url 'signup' %}" method="post" class="signup" onsubmit="return checkSignupForm()">
                 {% csrf_token %}
                 <div class="field">
-                    <input id="fname" name="firstname" type="text" value="{{first_name}}" placeholder="First Name"
-                        required>
+                    <input id="fname" name="first_name" type="text" value="{{first_name}}" placeholder="First Name"
+                        minlength="3" required>
                     <span class="block text-[12px] font-medium py-1 px-[10px] text-[red]" id="fname_error"></span>
 
                 </div>
                 <div class="field">
-                    <input id="lname" name="lastname" type="text" value="{{last_name}}" placeholder="Last Name">
+                    <input id="lname" name="last_name" type="text" value="{{last_name}}" placeholder="Last Name">
                     <span class="block text-[12px] font-medium py-1 px-[10px] text-[red]" id="lname_error"></span>
                 </div>
                 <div class="field">
                     <input id="email" name="email" type="email" value="{{email}}" placeholder="Email Address" required>
                     <span class="block text-[12px] font-medium py-1 px-[10px] text-[red]" id="email_error"></span>
                 </div>
+                <div class="field">
+                    <input id="phone" name="phone_number" type="tel" value="{{phone_number}}" placeholder="Phone Number"
+                        maxlength="10" minlength="10" required>
+                    <span class="block text-[12px] font-medium py-1 px-[10px] text-[red]" id="phone_error"></span>
+                </div>
                 <div class="field relative">
-                    <img src="{% static 'image/openeye.png' %}" class="password-btn" alt="show"
+                    <img src="{% static 'accounts/image/openeye.png' %}" class="password-btn" alt="show"
                         onclick="showpassword('password', this)">
-                    <input type="password" name="password" id="password" placeholder="Password" required>
+                    <input type="password" name="password" id="password" placeholder="Password" minlength="8" required>
                     <span class="block text-[12px] font-medium py-1 px-[10px] text-[red]" id="password_error"></span>
                 </div>
                 <div class="field relative">
-                    <img src="{% static 'image/openeye.png' %}" class="password-btn" alt="show"
+                    <img src="{% static 'accounts/image/openeye.png' %}" class="password-btn" alt="show"
                         onclick="showpassword('repassword', this)">
-                    <input type="password" name="repassword" id="repassword" placeholder="Confirm password" required>
+                    <input type="password" name="repassword" id="repassword" placeholder="Confirm password"
+                        minlength="8" required>
                     <span class="block text-[12px] font-medium py-1 px-[10px] text-[red]" id="repassword_error"></span>
                 </div>
                 <div class="field btn">
@@ -78,13 +84,13 @@
 {% endblock %}
 
 {% block script %}
-<script src="{% static 'js/script.js' %}"></script>
-<script src="{% static 'js/validators.js' %}"></script>
+<script src="{% static 'accounts/js/script.js' %}"></script>
+<script src="{% static 'accounts/js/validators.js' %}"></script>
 <script>
     function showpassword(id, x) {
         let passwordfield = document.querySelector(`input[id="${id}"]`)
         passwordfield.type = passwordfield.type === 'password' ? 'text' : 'password';
-        x.src = x.src.endsWith("/openeye.png") ? "{% static 'image/closeeye.png' %}" : "{% static 'image/openeye.png' %}";
+        x.src = x.src.endsWith("/openeye.png") ? "{% static 'accounts/image/closeeye.png' %}" : "{% static 'accounts/image/openeye.png' %}";
     }
 
     function checkSignupForm() {
@@ -92,15 +98,17 @@
         let fname = document.getElementById('fname');
         let lname = document.getElementById('lname');
         let email = document.getElementById('email');
+        let phone = document.getElementById('phone');
         let password = document.getElementById('password');
         let repassword = document.getElementById('repassword');
 
         let fname_error = document.getElementById('fname_error');
         let lname_error = document.getElementById('lname_error');
         let email_error = document.getElementById('email_error');
+        let phone_error = document.getElementById('phone_error');
         let password_error = document.getElementById('password_error');
         let repassword_error = document.getElementById('repassword_error');
-        let flags = [false, true, false, false, false]
+        let flags = [false, true, false, false, false, false]
 
         // check first name
         if (fname.value.length < 3) {
@@ -158,47 +166,64 @@
             flags[2] = true;
         }
 
+        // check phone
+        if (!phone.value.length) {
+            phone.style.borderColor = 'Red';
+            flags[3] = false;
+            phone_error.innerHTML = "Please enter phone number";
+        }
+        else if (phone.value.search(/^\d{10}$/) === -1) {
+            phone.style.borderColor = 'Red';
+            flags[3] = false;
+            phone_error.innerHTML = "Please enter a valid phone number";
+        }
+        else {
+            phone.style.borderColor = 'green';
+            phone_error.innerHTML = "";
+            flags[3] = true;
+        }
+
         // check password
         if (!password.value.length) {
             password.style.borderColor = 'Red';
-            flags[3] = false;
+            flags[4] = false;
             password_error.innerHTML = "Please enter password";
         }
 
         else if (password.value.length < 8) {
             password.style.borderColor = 'Red';
             password_error.innerHTML = "Password must be 8 character long";
-            flags[3] = false;
+            flags[4] = false;
         }
         else if (!password_validator(password.value)) {
             password.style.borderColor = 'Red';
             password_error.innerHTML = "Password must contain alphanumeric (a-z, A-Z, 0-9) and @, !, $, %, ^, &, *, (, ), +, -, ?, /";
-            flags[3] = false;
+            flags[4] = false;
         }
         else {
             password.style.borderColor = 'green';
             password_error.innerHTML = "";
-            flags[3] = true;
+            flags[4] = true;
         }
 
         // check confirm password
         if (repassword.value.length) {
             repassword.style.borderColor = 'Red';
-            flags[4] = false;
+            flags[5] = false;
             repassword_error.innerHTML = "Please enter confirm password";
         }
 
         if (repassword.value !== password.value) {
             repassword.style.borderColor = 'Red';
             repassword_error.innerHTML = "Confirm Password should be same as password";
-            flags[4] = false;
+            flags[5] = false;
         }
         else {
             repassword.style.borderColor = 'green';
             repassword_error.innerHTML = "";
-            flags[4] = true;
+            flags[5] = true;
         }
-        return flags[0] && flags[1] && flags[2] && flags[3] && flags[4];
+        return flags[0] && flags[1] && flags[2] && flags[3] && flags[4] && flags[5];
     }
 </script>
 

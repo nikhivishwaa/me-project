@@ -2,10 +2,6 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('dashboard/', views.dashboard, name='dashboard'),
-    path('signup/', views.register, name='signup'),
-    path('login/', views.userauth, name='login'),
-    path('logout/', views.logoutuser, name='logout'),
-    path('profile/', views.profile, name='profile'),
-    path('api/calculation/', include('calculate.urls'), name='calculation'),
+        path('', views.dashboard, name='dashboard'),
+        path('calculate/', views.calculate, name='calculate'),
 ]

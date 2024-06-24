@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'accounts/base.html' %}
 
 {% load static %}
 
@@ -39,13 +39,13 @@
         {% csrf_token %}
 
         <div class="field">
-          <input type="email" placeholder="Email Address" name="email" id="lemail" required>
+          <input type="email" placeholder="Email Address" name="email" id="email" required>
           <span class="block text-[12px] font-medium py-1 px-[10px] text-[red]" id="email_error"></span>
         </div>
         <div class="field relative">
-          <img src="{% static 'image/openeye.png' %}" class="password-btn" alt="show"
-            onclick="showpassword('lpassword', this)">
-          <input type="password" placeholder="Password" name="password" id="lpassword" required>
+          <img src="{% static 'accounts/image/openeye.png' %}" class="password-btn" alt="show"
+            onclick="showpassword('password', this)">
+          <input type="password" placeholder="Password" name="password" id="password" required>
           <span class="block text-[12px] font-medium py-1 px-[10px] text-[red]" id="password_error"></span>
         </div>
         <div class="pass-link"><a href="#">Forgot password?</a></div>
@@ -66,20 +66,20 @@
 {% endblock %}
 
 {% block script %}
-<script src="{% static 'js/script.js' %}"></script>
-<script src="{% static 'js/validators.js' %}"></script>
+<script src="{% static 'accounts/js/script.js' %}"></script>
+<script src="{% static 'accounts/js/validators.js' %}"></script>
 <script>
 
   function showpassword(id, x) {
     let passwordfield = document.querySelector(`input[id="${id}"]`)
     passwordfield.type = passwordfield.type === 'password' ? 'text' : 'password';
-    x.src = x.src.endsWith("/openeye.png") ? "{% static 'image/closeeye.png' %}" : "{% static 'image/openeye.png' %}";
+    x.src = x.src.endsWith("/openeye.png") ? "{% static 'accounts/image/closeeye.png' %}" : "{% static 'accounts/image/openeye.png' %}";
   }
 
   function checkLoginForm(x) {
     console.log("checking login form");
-    let email = document.getElementById('lemail');
-    let password = document.getElementById('lpassword');
+    let email = document.getElementById('email');
+    let password = document.getElementById('password');
     let email_error = document.getElementById('email_error');
     let password_error = document.getElementById('password_error');
     let flags = [false, false]
