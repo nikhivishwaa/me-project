@@ -5,13 +5,15 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
-html,
-body {
+#body-holder {
   display: grid;
-  height: 100%;
+  min-height: 95vh;
   width: 100%;
   place-items: center;
   /*background-color: #8EC5FC;*/
+  background-image: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
+}
+body{
   background-image: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
 }
 ::selection {

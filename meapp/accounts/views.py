@@ -31,7 +31,8 @@ def register(request):
                 user.save()
                 print('registered successfully', user)
                 otp_helper(user)
-                messages.success(request, "Account Created. Verify your email")
+                messages.success(request, "Account Created")
+                messages.success(request, "We have sent an OTP to your email for verification")
         
                 return render(request, 'accounts/verifyemail.html', context={'email':user.email, "sent":True})
         else:

@@ -12,7 +12,14 @@ def dashboard(request):
 def landingpage(request):
     return render(request,'home/index.html')
 
+def about(request):
+    return render(request,'home/about.html')
+
 @login_required(login_url="/login")
 def calculate(request):
+    # if request.user.is_restricted:
+    #     messages.error(request, 'You are not allowed to access calculator')
+    #     return redirect('/dashboard')
+
     return render(request,'home/calculator.html', context={'walls': range(1,5)})
 
