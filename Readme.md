@@ -39,3 +39,9 @@ python manage.py runserver
 ```
 deactivate
 ```
+
+```
+a2dissite 000-default.conf
+a2ensite 000-default.conf
+service apache2 restart
+```
