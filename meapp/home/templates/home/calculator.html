@@ -3,10 +3,23 @@
 {% load static %}
 
 {% block title %}
-<title>Home - CHG</title>
+<title>Calculator - Find best AC based on heatload of your home/office</title>
 {% endblock %}
 
 {% block body %}
+
+{% if messages %}
+<section class="messages absolute w-[100%]" style="z-index: 5;">
+    {% for message in messages %}
+    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"
+        role="alert">
+        <strong>{{ message.tags|capfirst }} :</strong> {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+</section>
+{% endif %}
+
 <section class="flex items-center justify-center min-h-screen mt-4">
     <div class="bg-white shadow-md rounded-lg p-8 w-full max-w-3xl">
         <div class="uper">
@@ -18,11 +31,21 @@
                 </div>
             </div> -->
             <div>
+                {% if rights.walls %}
                 <button class="button" id="form0btn" onclick="formula()">CHGW</button>
+                {% endif %}
+                {% if rights.windows %}
                 <button class="button" id="form1btn" onclick="formula(1)">CHGW</button>
+                {% endif %}
+                {% if rights.roof %}
                 <button class="button" id="form2btn" onclick="formula(2)">CHGR</button>
+                {% endif %}
+                {% if rights.occupants %}
                 <button class="button" id="form3btn" onclick="formula(3)">CHGO</button>
+                {% endif %}
+                {% if rights.equipments %}
                 <button class="button" id="form4btn" onclick="formula(4)">CHGE</button>
+                {% endif %}
                 <button class="button" id="form5btn" onclick="formula(5)">CHGT</button>
             </div>
 
@@ -34,11 +57,12 @@
         <div id="Calculator" class="bg-gray-100 p-6 rounded-lg shadow-sm">
 
             <!-- Wall Inputs -->
+            {% if rights.walls %}
             <div id="CHGWalls" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto mt-10">
                 <h2 class="text-2xl font-bold mb-6 text-center">Heat Gain Through Walls Calculator</h2>
                 <form id="heatGainForm-wall">
                     <div id="walls">
-                        {% for count in walls %}
+                        {% for count in walls_iter %}
                         <div class="wall-input mb-4">
                             <h4 class="font-semibold mb-2">Wall {{count}}</h4>
                             <div class="mb-4">
@@ -83,8 +107,10 @@
                 </form>
                 <div id="result-wall" class="mt-6 text-center text-lg font-semibold"></div>
             </div>
+            {% endif %}
 
             <!-- CHGWindow -->
+            {% if rights.windows %}
             <div id="CHGWindow" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto">
                 <h2 class="text-2xl font-bold mb-6 text-center">Heat Gain Through Windows Calculator</h2>
                 <form id="heatGainForm-window">
@@ -121,8 +147,10 @@
                 </form>
                 <div id="result-window" class="mt-6 text-center text-lg font-semibold"></div>
             </div>
+            {% endif %}
 
             <!-- CHGRoof -->
+            {% if rights.roof %}
             <div id="CHGRoof" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto">
                 <h2 class="text-2xl font-bold mb-6 text-center">Heat Gain Through Roof Calculator</h2>
                 <form id="heatGainForm-roof">
@@ -159,8 +187,10 @@
                 </form>
                 <div id="result-roof" class="mt-6 text-center text-lg font-semibold"></div>
             </div>
+            {% endif %}
 
             <!-- CHGOccupmants -->
+            {% if rights.occupants %}
             <div id="CHGOccupants" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto">
                 <h2 class="text-2xl font-bold mb-6 text-center">Heat Gain from Occupants Calculator</h2>
                 <form id="heatGainForm">
@@ -176,9 +206,10 @@
                 </form>
                 <div id="result-occupant" class="mt-6 text-center text-lg font-semibold"></div>
             </div>
-
+            {% endif %}
 
             <!-- CHGEquipments -->
+            {% if rights.equipments %}
             <div id="CHGEquipments" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto">
                 <h2 class="text-2xl font-bold mb-6 text-center">Heat Gain Through Roof Calculator</h2>
                 <form id="heatGainForm-equipement">
@@ -210,6 +241,7 @@
                 </form>
                 <div id="result-equipment" class="mt-6 text-center text-lg font-semibold"></div>
             </div>
+            {% endif %}
 
             <!-- CHGTotal -->
             <div id="CHGTotal" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto">
@@ -274,24 +306,29 @@
     <a href="https://www.flaticon.com/free-icons/arrows" title="arrows icons"></a>
 
     <script>
+        // const allowed
 
-        function logout() {
-            window.location.pathname = '/logout';
-        }
-
-
+        let rights = `{{rights.walls}},{{rights.windows}},{{rights.roof}},{{rights.occupants}},{{rights.equipments}},True`
+        rights = rights.split(',')
+        console.log(rights)
         const forms = ['CHGWalls', 'CHGWindow', 'CHGRoof', 'CHGOccupants', 'CHGEquipments', 'CHGTotal']
+        const forms_obj = {}
+        const forms_allowed = forms.filter((id, i) => {
+            if (rights[i] === 'True') forms_obj[i] = id;
+        })
+        console.log(forms_allowed, forms_obj)
         function formula(x = 0) {
-            console.log(x)
-            for (const i of forms) {
-                document.querySelector(`#${i}`).style.display = 'none';
-            }
-            document.querySelector(`#${forms[x]}`).style.display = 'block';
-            if(x===5){
-                CHGTotal()
+            if (rights[x] === 'True') {
+                for (const i of Object.keys(forms_obj)) {
+                    document.querySelector(`#${forms[i]}`).style.display = 'none';
+                }
+                document.querySelector(`#${forms_obj[x]}`).style.display = 'block';
+                if (x === 5) {
+                    CHGTotal()
+                }
             }
         }
-        formula();
+        formula(Object.keys(forms_obj)[0]);
     </script>
 </section>
 
