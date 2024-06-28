@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 import datetime as dt
 import random as rd
+from .models import CalculatorAccessRole
 
 User = get_user_model()
 
@@ -16,7 +17,6 @@ import json
 
 def register(request):
     if request.method == 'POST':
-        print(request.POST)
         dataval = SignupDataValidation(request.POST)
         if dataval.is_valid():  
             d = dataval.data          
@@ -29,7 +29,7 @@ def register(request):
                 user = User.objects.create_user(**d)
                 user.set_password(dataval.password)
                 user.save()
-                print('registered successfully', user)
+                # print('registered successfully', user)
                 otp_helper(user)
                 messages.success(request, "Account Created")
                 messages.success(request, "We have sent an OTP to your email for verification")
@@ -47,7 +47,6 @@ def verifyemail(request):
         email = request.POST.get('email', '').lower()
         otp = request.POST.get('otp', '')
         resend = request.POST.get('resend', '')
-        print(resend, email, otp, type(resend))
 
         if email:
             user = User.objects.filter(email = email)
@@ -67,11 +66,15 @@ def verifyemail(request):
                 elif user.email_otp == otp:
                     user.verified = True
                     user.email_otp = ''
+                    user.calc_access = CalculatorAccessRole.objects.filter(walls = True, 
+                                                                           windows = True, 
+                                                                           roof = True, 
+                                                                           occupants = True, 
+                                                                           equipments = True).first()
                     user.save()
                     messages.success(request, "Email Verified")
                     return redirect('login')
                 else:
-                    print(user.email_otp == otp)
                     messages.error(request, "Invalid OTP")
                     return render(request, 'accounts/verifyemail.html', context={'email':email})
         else:
@@ -116,7 +119,7 @@ def userauth(request):
         password = request.POST.get('password', '')
         if email and password:
             user = authenticate(email=email, password=password)
-            print('user', user, 'logged in')
+            # print('user', user, 'logged in')
             if user is not None:
                 login(request, user)
                 if user.verified:

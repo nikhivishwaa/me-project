@@ -22,18 +22,24 @@ def contact(request):
 
 @login_required(login_url="/login")
 def calculate(request):
-    rights_count = 0
-    rights_list = [ 'walls', 'windows', 'roof', 'occupants', 'equipments'] 
-    rights = {}
+    print("access",request.user.calc_access)
+    if request.user.calc_access:
+        rights_count = 0
+        rights_list = [ 'walls', 'windows', 'roof', 'occupants', 'equipments'] 
+        rights = {}
 
-    for right in rights_list:
-        rights[right] = request.user.calc_access.__getattribute__(right)
-        rights_count += rights[right]
+        for right in rights_list:
+            rights[right] = request.user.calc_access.__getattribute__(right)
+            rights_count += rights[right]
 
-    print(rights, rights_count)
+        print(rights, rights_count)
 
-    if not rights_count:
-        messages.error(request, 'You are not allowed to access calculator')
+        if not rights_count:
+            messages.error(request, 'You are not allowed to access calculator')
+            return redirect('/dashboard')
+
+        return render(request,'home/calculator.html', context={'walls_iter': range(1,5), 'rights': rights})
+
+    else:
+        messages.error(request, 'You are not authorized to access this calculator')
         return redirect('/dashboard')
-
-    return render(request,'home/calculator.html', context={'walls_iter': range(1,5), 'rights': rights})

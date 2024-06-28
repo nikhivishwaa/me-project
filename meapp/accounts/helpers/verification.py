@@ -10,7 +10,7 @@ def send_otp_email(user_email, user_name, otp):
         'user_name': user_name,
         'otp': otp,
         'validity_period': 10,
-        'company_name': 'CHG',
+        'company_name': 'TonnaMatrix',
         'current_year': timezone.now().year,
     }
     
