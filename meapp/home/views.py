@@ -10,10 +10,13 @@ def dashboard(request):
     return render(request,'home/dashboard.html')
 
 def landingpage(request):
-    return render(request,'home/index.html')
+    return render(request,'home/home.html')
 
 def about(request):
     return render(request,'home/about.html')
+
+def contact(request):
+    return render(request,'home/contact.html')
 
 @login_required(login_url="/login")
 def calculate(request):

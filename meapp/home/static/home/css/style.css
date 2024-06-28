@@ -152,6 +152,7 @@ body {
 
 /* Section-1 Styles */
 #section-1 {
+    width: 100%;
     height: 38em;
     background-color: #222;
 
@@ -357,6 +358,7 @@ body {
     }
 
     #section-1 {
+        width: 100%;
         height: 46em;
     }
 
@@ -375,6 +377,7 @@ body {
     }
 
     #section-1 {
+        width: 100%;
         height: 43em;
     }
 
@@ -393,6 +396,7 @@ body {
     }
 
     #section-1 {
+        width: 100%;
         height: 40em;
     }
 
@@ -417,6 +421,7 @@ body {
     }
 
     #section-1 {
+        width: 100%;
         height: 35em;
     }
 
@@ -457,6 +462,7 @@ body {
     }
 
     #section-1 {
+        width: 100%;
         height: 29em;
     }
 
@@ -487,6 +493,7 @@ body {
     }
 
     #section-1 {
+        width: 100%;
         height: 27em;
     }
 
@@ -529,7 +536,9 @@ body {
     }
 
     #section-1 {
-        height: 26em;
+        width: 100%;
+        /* height: 26em; */
+        width: 100%;
     }
 
     #section-1 .content-slider nav {

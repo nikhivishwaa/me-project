@@ -1,0 +1,16 @@
+{% extends 'home/base.html' %}
+
+{% load static %}
+
+{% block head %}
+
+<title>Contact- TannaMatrix</title>
+<!-- <link rel="stylesheet" href="{% static 'home/css/style.css' %}"> -->
+{% endblock %}
+
+{% block body %}
+{{request.user.is_authenticated }}
+
+<h1>this is contact Page</h1>
+
+{% endblock %}

@@ -18,40 +18,50 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-success bg-white text-dark sticky top-0 m-0 w-100">
+    <nav class="navbar navbar-expand-lg navbar-success bg-white text-dark sticky top-0 m-0 w-100 py-0" style="z-index: 10;">
+        <div class="container justify-content-end w-1/3">
+            <a class="navbar-brand" href="/">
+                <img src="{% static 'home/image/logo1.png' %}" alt="" width="30" height="24" class="w-[50px]">
+            </a>
+            <a class="navbar-brand" href="/">TonnaMetrics</a>
+        </div>
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">CHG</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <div class="navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-3">
+                    {% if request.user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link text-black" aria-current="page" href="/">Home</a>
+                        <a class="nav-link text-black pb-[2px]" aria-current="page" id="dashboard" href="/dashboard">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-black" aria-current="page" href="/about">About</a>
+                        <a class="nav-link text-black pb-[2px]" aria-current="page" id="calculator" href="/calculator">Calculator</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-black" aria-current="page" href="/dashboard">Dashboard</a>
-                    </li>
-                    {% if not request.user.is_restricted %}
-                    <li class="nav-item">
-                        <a class="nav-link text-black" aria-current="page" href="/calculator">Calculator</a>
-                    </li>
-                    {% endif %}
-                </ul>
-                <form class="d-flex gap-2">
-                    {% if not request.user.isauthenticated %}
-                    <button class="btn btn-outline-success">Login</button>
-                    <button class="btn btn-outline-success">Signup</button>
                     {% else %}
-                    <button class="btn btn-outline-success">profile</button>
-                    <button class="btn btn-outline-success">Logout</button>
+                    <li class="nav-item">
+                        <a class="nav-link text-black pb-[2px]" aria-current="page" id="home" href="/">Home</a>
+                    </li>
+
                     {% endif %}
-                </form>
+                    <li class="nav-item">
+                        <a class="nav-link text-black pb-[2px]" aria-current="page" id="about" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-black pb-[2px]" aria-current="page" id="contact" href="/contact">Contact</a>
+                    </li>
+                </ul>
+                <div class="d-flex gap-2">
+                    {% if not request.user.is_authenticated %}
+                    <button class="btn btn-outline-success" id="login" onclick="navigate(this)">Login</button>
+                    <button class="btn btn-outline-success" id="signup" onclick="navigate(this)">Signup</button>
+                    {% else %}
+                    <button class="btn btn-outline-success" id="profile" onclick="navigate(this)">profile</button>
+                    <button class="btn btn-outline-success" id="logout" onclick="navigate(this)">Logout</button>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </nav>
@@ -59,12 +69,12 @@
     {% block header %}
     {% endblock %}
 
-    <section id="body-holder">
+    <section id="body-holder" class="relative">
         {% block body %}{% endblock %}
     </section>
     {% block footer %}
     <footer style="background-color: white; color: grey; font-size: 14px; padding: 10px 0px; margin-top: 10px;">
-        <p style="text-align: center;">&copy; 2024 CHG. All rights reserved</p>
+        <p style="text-align: center;">&copy; 2024 TonnaMetrics. All rights reserved</p>
     </footer>
     {% endblock %}
 
@@ -76,6 +86,18 @@
         integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="{% static 'home/js/index.js' %}"></script>
     {% block script %}{% endblock %}
+    <script>
+        function navigate(route) {
+            console.log(route.id)
+            document.location.pathname = '/' + route.id;
+        }
+
+        function tab_underline() {
+            let id = document.location.pathname.replaceAll('/', '') || 'home';
+            document.querySelector(`a#${id}`).style.borderBottom = '3px solid red';
+        }
+        tab_underline()
+    </script>
 </body>
 
 </html>
