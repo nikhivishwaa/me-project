@@ -9,9 +9,9 @@ var total = {};
 async function CHGWalls() {
   walls = [];
   for (let i = 1; i < 5; i++) {
-    const thermal_conductivity = parseFloat(
-      document.getElementById(`k-wall-${i}`).value
-    );
+    // const thermal_conductivity = parseFloat(
+    //   document.getElementById(`k-wall-${i}`).value
+    // );
     const thickness = parseFloat(document.getElementById(`d-wall-${i}`).value);
     const height = parseFloat(
       document.getElementById(`height-wall-${i}`).value
@@ -21,7 +21,6 @@ async function CHGWalls() {
       document.getElementById(`temperature-wall-${i}`).value
     );
     const wallheat = {
-      thermal_conductivity,
       thickness,
       height,
       width,
@@ -38,16 +37,16 @@ async function CHGWalls() {
 }
 
 async function CHGWindows() {
-  const thermal_conductivity = parseFloat(
-    document.getElementById("k-window").value
-  );
+  // const thermal_conductivity = parseFloat(
+  //   document.getElementById("k-window").value
+  // );
   const thickness = parseFloat(document.getElementById("d-window").value);
   const area = parseFloat(document.getElementById("area-window").value);
   const temperature = parseFloat(
     document.getElementById("temperature-window").value
   );
 
-  const windowheat = { thermal_conductivity, thickness, area, temperature };
+  const windowheat = { thickness, area, temperature };
   windows.push(windowheat);
   console.log(windows);
   total.windows = await getheatload({windows})
@@ -55,16 +54,16 @@ async function CHGWindows() {
 }
 
 async function CHGRoofs() {
-  const thermal_conductivity = parseFloat(
-    document.getElementById("k-roof").value
-  );
+  // const thermal_conductivity = parseFloat(
+  //   document.getElementById("k-roof").value
+  // );
   const thickness = parseFloat(document.getElementById("d-roof").value);
   const area = parseFloat(document.getElementById("area-roof").value);
   const temperature = parseFloat(
     document.getElementById("temperature-roof").value
   );
 
-  roof = { thermal_conductivity, thickness, area, temperature };
+  roof = { thickness, area, temperature };
   console.log(roof);
 
   total.roof = await getheatload({ roof });
@@ -134,23 +133,10 @@ async function getheatload(json_data = {}) {
       options
     );
     const movies = await response.json();
+    console.log(movies)
     return movies.data;
   } catch (e) {
     console.log(e.message);
     return e.message;
   }
 }
-
-// Simulated user information (replace with actual user data handling)
-const user = {
-  name: "John Doe",
-  email: "john.doe@example.com",
-  role: "User",
-};
-
-// Display user information
-document.getElementById("userInfo").innerHTML = `
-    <p><strong>Name:</strong> ${user.name}</p>
-    <p><strong>Email:</strong> ${user.email}</p>
-    <p><strong>Role:</strong> ${user.role}</p>
-`;

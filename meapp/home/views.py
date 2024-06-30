@@ -38,7 +38,8 @@ def calculate(request):
             messages.error(request, 'You are not allowed to access calculator')
             return redirect('/dashboard')
 
-        return render(request,'home/calculator.html', context={'walls_iter': range(1,5), 'rights': rights})
+        # return render(request,'home/calculator.html', context={'walls_iter': range(1,5), 'rights': rights})
+        return render(request,'home/calc.html', context={'walls_iter': range(1,5), 'rights': rights})
 
     else:
         messages.error(request, 'You are not authorized to access this calculator')

@@ -1,0 +1,376 @@
+{% extends 'home/base.html' %}
+
+{% load static %}
+
+{% block title %}
+<title>Calculator - Find best AC based on heatload of your home/office</title>
+{% endblock %}
+
+{% block body %}
+
+{% if messages %}
+<section class="messages absolute w-[100%]" style="z-index: 5;">
+    {% for message in messages %}
+    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"
+        role="alert">
+        <strong>{{ message.tags|capfirst }} :</strong> {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+</section>
+{% endif %}
+
+<section class="flex items-center justify-center min-h-screen mt-2">
+    <div class="bg-white shadow-md rounded-lg p-8 w-full max-w-3xl">
+        <div class="uper">
+            <div>
+                {% if rights.walls %}
+                <button class="button px-[10px] w-auto" id="form0btn" onclick="formula()">Walls</button>
+                {% endif %}
+                {% if rights.windows %}
+                <button class="button px-[10px] w-auto" id="form1btn" onclick="formula(1)">Windows</button>
+                {% endif %}
+                {% if rights.roof %}
+                <button class="button px-[10px] w-auto" id="form2btn" onclick="formula(2)">Roof</button>
+                {% endif %}
+                {% if rights.occupants %}
+                <button class="button px-[10px] w-auto" id="form3btn" onclick="formula(3)">Occupants</button>
+                {% endif %}
+                {% if rights.equipments %}
+                <button class="button px-[10px] w-auto" id="form4btn" onclick="formula(4)">Equipments</button>
+                {% endif %}
+                <button class="button px-[10px] w-auto" id="form5btn" onclick="formula(5)">CHGT</button>
+            </div>
+        </div>
+        <div id="Calculator" class="bg-gray-100 p-6 rounded-lg shadow-sm">
+
+            <!-- Wall Inputs -->
+            {% if rights.walls %}
+            <div id="CHGWalls" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto mt-1">
+                <h2 class="text-2xl font-bold mb-6 text-center">Heat Gain Through Walls Calculator</h2>
+                <form id="heatGainForm-wall">
+                    <div id="walls">
+                        {% for count in walls_iter %}
+                        <div class="wall-input mb-4">
+                            <h4 class="font-semibold mb-2">Wall {{count}}</h4>
+                            <div class="flex justify-between gap-[10px]">
+                                <!-- <div class="mb-4">
+                                    <label for="k-wall-{{count}}"
+                                        class="block text-sm font-medium text-gray-700">Thermal
+                                        Conductivity
+                                        (k)</label>
+                                    <input type="number" min="0" id="k-wall-{{count}}"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        value="0.5" step="0.01" onchange="check(this)">
+                                        <span class="text-[red] text-xs font-bold" id="k-wall-{{count}}-error"></span>
+                                </div> -->
+                                <div class="mb-1">
+                                    <label for="d-wall-{{count}}"
+                                        class="block text-sm font-medium text-gray-700">Thickness</label>
+                                    <input type="number" min="0" id="d-wall-{{count}}"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        value="0.127" step="0.001" max="0.30" onchange="check(this)">
+                                        <span class="text-[red] text-xs font-bold" id="d-wall-{{count}}-error"></span>
+                                </div>
+                                <div class="mb-1">
+                                    <label for="height-wall-{{count}}"
+                                        class="block text-sm font-medium text-gray-700">Height</label>
+                                    <input type="number" min="0" id="height-wall-{{count}}"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        step="0.01" onchange="check(this)">
+                                        <span class="text-[red] text-xs font-bold" id="height-wall-{{count}}-error"></span>
+
+                                </div>
+                                <div class="mb-1">
+                                    <label for="width-wall-{{count}}"
+                                        class="block text-sm font-medium text-gray-700">Width</label>
+                                    <input type="number" min="0" id="width-wall-{{count}}"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        step="0.01" onchange="check(this)">
+                                        <span class="text-[red] text-xs font-bold" id="width-wall-{{count}}-error"></span>
+
+                                </div>
+                            </div>
+                            <span class="block mb-4 text-xs px-2"><span class="font-bold text-[red]">*</span> All 3
+                                dimensions are in Meter</span>
+                            <div class="mb-4">
+                                <label for="temperature-wall-{{count}}"
+                                    class="block text-sm font-medium text-gray-700">Temperature
+                                    (°C)</label>
+                                <input type="number" min="0" id="temperature-wall-{{count}}"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    step="1" onchange="check(this)">
+                                    <span class="text-[red] text-xs font-bold" id="temperature-wall-{{count}}-error"></span>
+
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" onclick="CHGWalls()"
+                        class="w-full bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-600">Calculate</button>
+                </form>
+                <div id="result-wall" class="mt-6 text-center text-lg font-semibold"></div>
+            </div>
+            {% endif %}
+
+            <!-- CHGWindow -->
+            {% if rights.windows %}
+            <div id="CHGWindow" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto">
+                <h2 class="text-2xl font-bold mb-6 text-center">Heat Gain Through Windows Calculator</h2>
+                <form id="heatGainForm-window">
+                    <div class="flex justify-between gap-[10px]">
+                        <!-- <div class="mb-4">
+                            <label for="k-window" class="block text-sm font-medium text-gray-700">Thermal Conductivity
+                                (k)</label>
+                            <input type="number" min="0" id="k-window"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                value="0.15" step="0.01">
+                        </div> -->
+                        <div class="mb-1">
+                            <label for="d-window" class="block text-sm font-medium text-gray-700">Thickness</label>
+                            <input type="number" min="0" id="d-window"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                value="0.004" step="0.001" max="0.1">
+                        </div>
+                        <div class="mb-1">
+                            <label for="height-window" class="block text-sm font-medium text-gray-700">Height</label>
+                            <input type="number" min="0" id="height-window"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                step="0.01">
+
+                        </div>
+                        <div class="mb-1">
+                            <label for="width-window" class="block text-sm font-medium text-gray-700">Width</label>
+                            <input type="number" min="0" id="width-window"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                step="0.01">
+
+                        </div>
+                    </div>
+                    <span class="block mb-4 text-xs px-2"><span class="font-bold text-[red]">*</span> All 3
+                        dimensions are in Meter</span>
+                    <div class="mb-4">
+                        <label for="area-window" class="block text-sm font-medium text-gray-700">Area (* sq.
+                            meter)</label>
+                        <input type="number" min="0" id="area-window"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            step="0.001">
+                    </div>
+                    <div class="mb-4">
+                        <label for="temperature-window" class="block text-sm font-medium text-gray-700">Temperature
+                            (°C)</label>
+                        <input type="number" min="0" id="temperature-window"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            step="1">
+                    </div>
+                    <button type="button" onclick="CHGWindows()"
+                        class="w-full bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-600">Calculate</button>
+                </form>
+                <div id="result-window" class="mt-6 text-center text-lg font-semibold"></div>
+            </div>
+            {% endif %}
+
+            <!-- CHGRoof -->
+            {% if rights.roof %}
+            <div id="CHGRoof" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto">
+                <h2 class="text-2xl font-bold mb-6 text-center">Heat Gain Through Roof Calculator</h2>
+                <form id="heatGainForm-roof">
+                    <div class="mb-4">
+                        <label for="k-roof" class="block text-sm font-medium text-gray-700">Thermal Conductivity
+                            (k)</label>
+                        <input type="number" min="0" id="k-roof"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            value="0.5" step="0.01">
+                    </div>
+                    <div class="mb-4">
+                        <label for="d-roof" class="block text-sm font-medium text-gray-700">Thickness (d) (*
+                            meter)</label>
+                        <input type="number" min="0" id="d-roof"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            value="0.127" step="0.001">
+                    </div>
+                    <div class="mb-4">
+                        <label for="area-roof" class="block text-sm font-medium text-gray-700">Area (* sq. meter)
+                        </label>
+                        <input type="number" min="0" id="area-roof"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            step="0.1">
+                    </div>
+                    <div class="mb-4">
+                        <label for="temperature-roof" class="block text-sm font-medium text-gray-700">Temperature
+                            (°C)</label>
+                        <input type="number" min="0" id="temperature-roof"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            step="1">
+                    </div>
+                    <button type="button" onclick="CHGRoofs()"
+                        class="w-full bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-600">Calculate</button>
+                </form>
+                <div id="result-roof" class="mt-6 text-center text-lg font-semibold"></div>
+            </div>
+            {% endif %}
+
+            <!-- CHGOccupmants -->
+            {% if rights.occupants %}
+            <div id="CHGOccupants" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto">
+                <h2 class="text-2xl font-bold mb-6 text-center">Heat Gain from Occupants Calculator</h2>
+                <form id="heatGainForm">
+                    <div class="mb-4">
+                        <label for="occupants" class="block text-sm font-medium text-gray-700">Number of
+                            Occupants</label>
+                        <input type="number" min="0" id="occupants"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            step="1">
+                    </div>
+                    <button type="button" onclick="CHGOccupants()"
+                        class="w-full bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-600">Calculate</button>
+                </form>
+                <div id="result-occupant" class="mt-6 text-center text-lg font-semibold"></div>
+            </div>
+            {% endif %}
+
+            <!-- CHGEquipments -->
+            {% if rights.equipments %}
+            <div id="CHGEquipments" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto">
+                <h2 class="text-2xl font-bold mb-6 text-center">Heat Gain Through Roof Calculator</h2>
+                <form id="heatGainForm-equipement">
+                    <div class="mb-4">
+                        <label for="computer-equipment" class="block text-sm font-medium text-gray-700">Number of
+                            Computers
+                        </label>
+                        <input type="number" min="0" id="computer-equipment"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            step="1">
+                    </div>
+                    <div class="mb-4">
+                        <label for="fan-equipment" class="block text-sm font-medium text-gray-700">Number of
+                            Fans</label>
+                        <input type="number" min="0" id="fan-equipment"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            step="1">
+                    </div>
+                    <div class="mb-4">
+                        <label for="ledtubelight-equipment" class="block text-sm font-medium text-gray-700">Number of
+                            LED Tube Lights
+                        </label>
+                        <input type="number" min="0" id="ledtubelight-equipment"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            step="1">
+                    </div>
+                    <button type="button" onclick="CHGEquipments()"
+                        class="w-full bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-600">Calculate</button>
+                </form>
+                <div id="result-equipment" class="mt-6 text-center text-lg font-semibold"></div>
+            </div>
+            {% endif %}
+
+            <!-- CHGTotal -->
+            <div id="CHGTotal" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto">
+                <h2 class="text-2xl font-bold mb-6 text-center">Total Heat Gain Calculator</h2>
+                <form id="heatGainForm">
+                    <div class="mb-4">
+                        <label for="walls-total" class="block text-sm font-medium text-gray-700">Heat Gain Through Walls
+                            (Qwalls)</label>
+                        <input type="text" id="walls-total"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                    <div class="mb-4">
+                        <label for="window-total" class="block text-sm font-medium text-gray-700">Heat Gain Through
+                            Window
+                            (Qwindow)</label>
+                        <input type="text" id="window-total"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                    <div class="mb-4">
+                        <label for="roof-total" class="block text-sm font-medium text-gray-700">Heat Gain Through Roof
+                            (Qroof)</label>
+                        <input type="text" id="roof-total"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                    <div class="mb-4">
+                        <label for="occupants-total" class="block text-sm font-medium text-gray-700">Heat Gain from
+                            Occupants
+                            (Qoccupants)</label>
+                        <input type="text" id="occupants-total"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                    <div class="mb-4">
+                        <label for="computers-total" class="block text-sm font-medium text-gray-700">Heat Gain from
+                            Computers
+                            (Qcomputers)</label>
+                        <input type="text" id="computers-total"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                    <div class="mb-4">
+                        <label for="lights-total" class="block text-sm font-medium text-gray-700">Heat Gain from LED
+                            Tube
+                            Lights
+                            (Qlights)</label>
+                        <input type="text" id="lights-total"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                    <div class="mb-4">
+                        <label for="fans-total" class="block text-sm font-medium text-gray-700">Heat Gain from Fans
+                            (Qfans)</label>
+                        <input type="text" id="fans-total"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    </div>
+                    <button type="button" onclick="CHGTotal()"
+                        class="w-full bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-600">Calculate Total
+                        Heat
+                        Gain</button>
+                </form>
+                <div id="result" class="mt-6 text-center text-lg font-semibold"></div>
+            </div>
+        </div>
+    </div>
+    <a href="https://www.flaticon.com/free-icons/arrows" title="arrows icons"></a>
+
+    <script>
+        // const allowed
+
+        let rights = `{{rights.walls}},{{rights.windows}},{{rights.roof}},{{rights.occupants}},{{rights.equipments}},True`
+        rights = rights.split(',')
+        console.log(rights)
+        const forms = ['CHGWalls', 'CHGWindow', 'CHGRoof', 'CHGOccupants', 'CHGEquipments', 'CHGTotal']
+        const forms_obj = {}
+        const forms_allowed = forms.filter((id, i) => {
+            if (rights[i] === 'True') forms_obj[i] = id;
+        })
+        console.log(forms_allowed, forms_obj)
+        function formula(x = 0) {
+            if (rights[x] === 'True') {
+                for (const i of Object.keys(forms_obj)) {
+                    document.querySelector(`#${forms[i]}`).style.display = 'none';
+                }
+                document.querySelector(`#${forms_obj[x]}`).style.display = 'block';
+                if (x === 5) {
+                    CHGTotal()
+                }
+            }
+        }
+        formula(Object.keys(forms_obj)[0]);
+
+        function check(e) {
+            console.log(e, e.id)
+            if (!e.value) {
+                e.style.outline = '2px solid red';
+                document.getElementById(`${e.id}-error`).innerHTML = "can't be empty";
+            }
+            else if (e.value < e.min) {
+                e.style.outline = '2px solid red';
+                document.getElementById(`${e.id}-error`).innerHTML = "should be bigger than " + e.min;
+            }
+            else if (e.max && e.value > e.max) {
+                e.style.outline = '2px solid red';
+                document.getElementById(`${e.id}-error`).innerHTML = "should be lesser than " + e.max;
+            }
+            else {
+                e.style.outline = 'none';
+                document.getElementById(`${e.id}-error`).innerHTML = "";
+            }
+        }
+    </script>
+</section>
+
+{% endblock %}

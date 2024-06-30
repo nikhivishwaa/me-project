@@ -29,17 +29,27 @@ class HeatCalculationViewSet(ViewSet):
 @csrf_exempt
 def HeatCalculation(request):
     if request.method == 'POST':
-        stream = io.BytesIO(request.body)
-        
-        data = JSONParser().parse(stream)
+        if request.user.calc_access:
+            rights_list = [ 'walls', 'windows', 'roof', 'occupants', 'equipments'] 
+            access = request.user.calc_access
+            allowed_sources = []
 
-        heat_load = hg.TotalHeatLoad(data)
+            for right in rights_list:
+                if access.__getattribute__(right):
+                    allowed_sources.append(right)
 
-        response = {
-            'success': True, 
-            'data': {
-                    "total_heat_load":str(heat_load), 
-                    "air_conditioning": heat_load.tons_of_airconditioning()
+            if not len(allowed_sources):
+                response = {
+                    'success': False,
+                    'message' : 'You are not allowed to access calculator'
                 }
-        }
-        return HttpResponse(json.dumps(response), content_type='application/json')
+                return HttpResponse(json.dumps(response), content_type='application/json')
+
+            else:
+                stream = io.BytesIO(request.body)               
+                data = JSONParser().parse(stream)
+                # heat_load = hg.TotalHeatLoad(data)
+                heat_load = hg.PermissionedTotalHeatLoad(data, allowed_sources)
+
+                response = heat_load.get_result()
+                return HttpResponse(json.dumps(response), content_type='application/json')
