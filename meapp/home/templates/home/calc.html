@@ -21,87 +21,103 @@
 {% endif %}
 
 <section class="flex items-center justify-center min-h-screen mt-2">
-    <div class="bg-white shadow-md rounded-lg p-8 w-full max-w-3xl">
+    <div class="bg-white shadow-md rounded-lg p-8 w-full max-w-4xl m-0">
         <div class="uper">
-            <div>
+            <div class="flex gap-4 mb-3">
                 {% if rights.walls %}
-                <button class="button px-[10px] w-auto" id="form0btn" onclick="formula()">Walls</button>
+                <button class="status-btn px-[10px] w-auto" id="form0btn" onclick="formula(this)">Walls</button>
                 {% endif %}
                 {% if rights.windows %}
-                <button class="button px-[10px] w-auto" id="form1btn" onclick="formula(1)">Windows</button>
+                <button class="status-btn px-[10px] w-auto" id="form1btn" onclick="formula(this, 1)">Windows</button>
                 {% endif %}
                 {% if rights.roof %}
-                <button class="button px-[10px] w-auto" id="form2btn" onclick="formula(2)">Roof</button>
+                <button class="status-btn px-[10px] w-auto" id="form2btn" onclick="formula(this, 2)">Roof</button>
                 {% endif %}
                 {% if rights.occupants %}
-                <button class="button px-[10px] w-auto" id="form3btn" onclick="formula(3)">Occupants</button>
+                <button class="status-btn px-[10px] w-auto" id="form3btn" onclick="formula(this, 3)">Occupants</button>
                 {% endif %}
                 {% if rights.equipments %}
-                <button class="button px-[10px] w-auto" id="form4btn" onclick="formula(4)">Equipments</button>
+                <button class="status-btn px-[10px] w-auto" id="form4btn" onclick="formula(this, 4)">Equipments</button>
                 {% endif %}
-                <button class="button px-[10px] w-auto" id="form5btn" onclick="formula(5)">CHGT</button>
+                <button class="status-btn px-[10px] w-auto" id="form5btn" onclick="formula(this, 5)">Total</button>
             </div>
         </div>
-        <div id="Calculator" class="bg-gray-100 p-6 rounded-lg shadow-sm">
+        <div id="Calculator" class="bg-gray-100 p-6 rounded-lg shadow-sm  w-100">
 
             <!-- Wall Inputs -->
             {% if rights.walls %}
-            <div id="CHGWalls" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto mt-1">
+            <div id="CHGWalls" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto mt-1 w-100">
                 <h2 class="text-2xl font-bold mb-6 text-center">Heat Gain Through Walls Calculator</h2>
                 <form id="heatGainForm-wall">
                     <div id="walls">
                         {% for count in walls_iter %}
                         <div class="wall-input mb-4">
                             <h4 class="font-semibold mb-2">Wall {{count}}</h4>
-                            <div class="flex justify-between gap-[10px]">
-                                <!-- <div class="mb-4">
-                                    <label for="k-wall-{{count}}"
-                                        class="block text-sm font-medium text-gray-700">Thermal
-                                        Conductivity
-                                        (k)</label>
-                                    <input type="number" min="0" id="k-wall-{{count}}"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        value="0.5" step="0.01" onchange="check(this)">
-                                        <span class="text-[red] text-xs font-bold" id="k-wall-{{count}}-error"></span>
-                                </div> -->
-                                <div class="mb-1">
+                            <div class="flex justify-between gap-3">
+                                <div class="mb-1 flex-grow-1">
                                     <label for="d-wall-{{count}}"
-                                        class="block text-sm font-medium text-gray-700">Thickness</label>
+                                        class="block text-sm font-medium text-gray-700">Thickness <span
+                                            id="wall-{{count}}-unit-area" class="unit-area">(in M.)</span></label>
                                     <input type="number" min="0" id="d-wall-{{count}}"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        value="0.127" step="0.001" max="0.30" onchange="check(this)">
-                                        <span class="text-[red] text-xs font-bold" id="d-wall-{{count}}-error"></span>
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
+                                        value="0.127" step="0.001" max="0.35" onchange="check(this)">
+                                    <span class="text-[red] text-xs font-bold" id="d-wall-{{count}}-error"></span>
                                 </div>
-                                <div class="mb-1">
-                                    <label for="height-wall-{{count}}"
-                                        class="block text-sm font-medium text-gray-700">Height</label>
-                                    <input type="number" min="0" id="height-wall-{{count}}"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                        step="0.01" onchange="check(this)">
-                                        <span class="text-[red] text-xs font-bold" id="height-wall-{{count}}-error"></span>
+                                <div id="wall-{{count}}-dim-field" class="flex gap-3">
+                                    <div class="mb-1">
+                                        <label for="height-wall-{{count}}"
+                                            class="block text-sm font-medium text-gray-700">Height</label>
+                                        <input type="number" min="0" id="height-wall-{{count}}"
+                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
+                                            step="0.01" onchange="check(this)">
+                                        <span class="text-[red] text-xs font-bold"
+                                            id="height-wall-{{count}}-error"></span>
 
+                                    </div>
+                                    <div class="mb-1">
+                                        <label for="width-wall-{{count}}"
+                                            class="block text-sm font-medium text-gray-700">Width</label>
+                                        <input type="number" min="0" id="width-wall-{{count}}"
+                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
+                                            step="0.01" onchange="check(this)">
+                                        <span class="text-[red] text-xs font-bold"
+                                            id="width-wall-{{count}}-error"></span>
+
+                                    </div>
                                 </div>
-                                <div class="mb-1">
-                                    <label for="width-wall-{{count}}"
-                                        class="block text-sm font-medium text-gray-700">Width</label>
-                                    <input type="number" min="0" id="width-wall-{{count}}"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                <div class="mb-4 area-field" id="wall-{{count}}-area-field">
+                                    <label for="area-wall-{{count}}"
+                                        class="block text-sm font-medium text-gray-700">Area
+                                        M<sup>2</sup></label>
+                                    <input type="number" min="0" id="area-wall-{{count}}"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
                                         step="0.01" onchange="check(this)">
-                                        <span class="text-[red] text-xs font-bold" id="width-wall-{{count}}-error"></span>
+                                    <span class="text-[red] text-xs font-bold" id="area-wall-{{count}}-error"></span>
 
                                 </div>
                             </div>
-                            <span class="block mb-4 text-xs px-2"><span class="font-bold text-[red]">*</span> All 3
+                            <span class="block mb-4 text-xs px-2" id="wall-{{count}}-unit-dim"><span
+                                    class="font-bold text-[red]">*</span> All 3
                                 dimensions are in Meter</span>
-                            <div class="mb-4">
-                                <label for="temperature-wall-{{count}}"
-                                    class="block text-sm font-medium text-gray-700">Temperature
-                                    (°C)</label>
-                                <input type="number" min="0" id="temperature-wall-{{count}}"
-                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                    step="1" onchange="check(this)">
-                                    <span class="text-[red] text-xs font-bold" id="temperature-wall-{{count}}-error"></span>
+                            <div class="flex justify-between gap-3">
+                                <div class="mb-4 flex-grow-1">
+                                    <label for="temperature-wall-{{count}}"
+                                        class="block text-sm font-medium text-gray-700">Temperature
+                                        (°C)</label>
+                                    <input type="number" min="20" id="temperature-wall-{{count}}"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm min-w-[90%]"
+                                        step="1" onchange="check(this)">
+                                    <span class="text-[red] text-xs font-bold"
+                                        id="temperature-wall-{{count}}-error"></span>
 
+                                </div>
+                                <div class="mb-4">
+                                    <label for="wall-{{count}}-field-toggler"
+                                        class="block text-sm font-medium text-gray-700">Toggle</label>
+                                    <button type="button" id="wall-{{count}}-field-toggler"
+                                        class="mt-1 block rounded-md shadow-sm py-2 px-2 mb-2 border-[2px] border-[#9a98bc] sm:text-sm"
+                                        onclick="toggleAreaField(this, 'wall-{{count}}')">Area</button>
+                                </div>
                             </div>
                         </div>
                         {% endfor %}
@@ -118,51 +134,66 @@
             <div id="CHGWindow" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto">
                 <h2 class="text-2xl font-bold mb-6 text-center">Heat Gain Through Windows Calculator</h2>
                 <form id="heatGainForm-window">
-                    <div class="flex justify-between gap-[10px]">
-                        <!-- <div class="mb-4">
-                            <label for="k-window" class="block text-sm font-medium text-gray-700">Thermal Conductivity
-                                (k)</label>
-                            <input type="number" min="0" id="k-window"
-                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                value="0.15" step="0.01">
-                        </div> -->
-                        <div class="mb-1">
-                            <label for="d-window" class="block text-sm font-medium text-gray-700">Thickness</label>
+                    <div class="flex justify-between gap-3">
+                        <div class="mb-1 flex-grow-1">
+                            <label for="d-window" class="block text-sm font-medium text-gray-700">Thickness <span
+                                    id="window-unit-area" class="unit-area">(in M.)</span></label>
                             <input type="number" min="0" id="d-window"
-                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                value="0.004" step="0.001" max="0.1">
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
+                                value="0.004" step="0.001" max="0.10" onchange="check(this)">
+                            <span class="text-[red] text-xs font-bold" id="d-window-error"></span>
                         </div>
-                        <div class="mb-1">
-                            <label for="height-window" class="block text-sm font-medium text-gray-700">Height</label>
-                            <input type="number" min="0" id="height-window"
-                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                step="0.01">
+                        <div id="window-dim-field" class="flex gap-3">
+                            <div class="mb-1">
+                                <label for="height-window"
+                                    class="block text-sm font-medium text-gray-700">Height</label>
+                                <input type="number" min="0" id="height-window"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
+                                    step="0.01" onchange="check(this)">
+                                <span class="text-[red] text-xs font-bold" id="height-window-error"></span>
 
+                            </div>
+                            <div class="mb-1">
+                                <label for="width-window" class="block text-sm font-medium text-gray-700">Width</label>
+                                <input type="number" min="0" id="width-window"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
+                                    step="0.01" onchange="check(this)">
+                                <span class="text-[red] text-xs font-bold" id="width-window-error"></span>
+
+                            </div>
                         </div>
-                        <div class="mb-1">
-                            <label for="width-window" class="block text-sm font-medium text-gray-700">Width</label>
-                            <input type="number" min="0" id="width-window"
-                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                step="0.01">
+                        <div class="mb-4 area-field" id="window-area-field">
+                            <label for="area-window" class="block text-sm font-medium text-gray-700">Area
+                                M<sup>2</sup></label>
+                            <input type="number" min="0" id="area-window"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
+                                step="0.01" onchange="check(this)">
+                            <span class="text-[red] text-xs font-bold" id="area-window-error"></span>
 
                         </div>
                     </div>
-                    <span class="block mb-4 text-xs px-2"><span class="font-bold text-[red]">*</span> All 3
+                    <span class="block mb-4 text-xs px-2" id="window-unit-dim"><span
+                            class="font-bold text-[red]">*</span> All 3
                         dimensions are in Meter</span>
-                    <div class="mb-4">
-                        <label for="area-window" class="block text-sm font-medium text-gray-700">Area (* sq.
-                            meter)</label>
-                        <input type="number" min="0" id="area-window"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            step="0.001">
+                    <div class="flex justify-between gap-3">
+                        <div class="mb-4 flex-grow-1">
+                            <label for="temperature-window" class="block text-sm font-medium text-gray-700">Temperature
+                                (°C)</label>
+                            <input type="number" min="20" id="temperature-window"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm min-w-[90%]"
+                                step="1" onchange="check(this)">
+                            <span class="text-[red] text-xs font-bold" id="temperature-window-error"></span>
+
+                        </div>
+                        <div class="mb-4">
+                            <label for="window-field-toggler"
+                                class="block text-sm font-medium text-gray-700">Toggle</label>
+                            <button type="button" id="window-field-toggler"
+                                class="mt-1 block rounded-md shadow-sm py-2 px-2 mb-2 border-[2px] border-[#9a98bc] sm:text-sm"
+                                onclick="toggleAreaField(this, 'window')">Area</button>
+                        </div>
                     </div>
-                    <div class="mb-4">
-                        <label for="temperature-window" class="block text-sm font-medium text-gray-700">Temperature
-                            (°C)</label>
-                        <input type="number" min="0" id="temperature-window"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            step="1">
-                    </div>
+
                     <button type="button" onclick="CHGWindows()"
                         class="w-full bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-600">Calculate</button>
                 </form>
@@ -175,35 +206,66 @@
             <div id="CHGRoof" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto">
                 <h2 class="text-2xl font-bold mb-6 text-center">Heat Gain Through Roof Calculator</h2>
                 <form id="heatGainForm-roof">
-                    <div class="mb-4">
-                        <label for="k-roof" class="block text-sm font-medium text-gray-700">Thermal Conductivity
-                            (k)</label>
-                        <input type="number" min="0" id="k-roof"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            value="0.5" step="0.01">
+                    <div class="flex justify-between gap-3">
+                        <div class="mb-1 flex-grow-1">
+                            <label for="d-roof" class="block text-sm font-medium text-gray-700">Thickness <span
+                                    id="roof-unit-area" class="unit-area">(in M.)</span></label>
+                            <input type="number" min="0" id="d-roof"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
+                                value="0.127" step="0.001" max="0.35" onchange="check(this)">
+                            <span class="text-[red] text-xs font-bold" id="d-roof-error"></span>
+                        </div>
+                        <div id="roof-dim-field" class="flex gap-3">
+                            <div class="mb-1">
+                                <label for="length-roof" class="block text-sm font-medium text-gray-700">Length</label>
+                                <input type="number" min="0" id="length-roof"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
+                                    step="0.01" onchange="check(this)">
+                                <span class="text-[red] text-xs font-bold" id="length-roof-error"></span>
+
+                            </div>
+                            <div class="mb-1">
+                                <label for="breadth-roof"
+                                    class="block text-sm font-medium text-gray-700">Breadth</label>
+                                <input type="number" min="0" id="breadth-roof"
+                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
+                                    step="0.01" onchange="check(this)">
+                                <span class="text-[red] text-xs font-bold" id="breadth-roof-error"></span>
+
+                            </div>
+                        </div>
+                        <div class="mb-4 area-field" id="roof-area-field">
+                            <label for="area-roof" class="block text-sm font-medium text-gray-700">Area
+                                M<sup>2</sup></label>
+                            <input type="number" min="0" id="area-roof"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
+                                step="0.01" onchange="check(this)">
+                            <span class="text-[red] text-xs font-bold" id="area-roof-error"></span>
+
+                        </div>
                     </div>
-                    <div class="mb-4">
-                        <label for="d-roof" class="block text-sm font-medium text-gray-700">Thickness (d) (*
-                            meter)</label>
-                        <input type="number" min="0" id="d-roof"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            value="0.127" step="0.001">
+                    <span class="block mb-4 text-xs px-2" id="roof-unit-dim"><span class="font-bold text-[red]">*</span>
+                        All 3
+                        dimensions are in Meter</span>
+                    <div class="flex justify-between gap-3">
+                        <div class="mb-4 flex-grow-1">
+                            <label for="temperature-roof" class="block text-sm font-medium text-gray-700">Temperature
+                                (°C)</label>
+                            <input type="number" min="20" id="temperature-roof"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm min-w-[90%]"
+                                step="1" onchange="check(this)">
+                            <span class="text-[red] text-xs font-bold" id="temperature-roof-error"></span>
+
+                        </div>
+                        <div class="mb-4">
+                            <label for="roof-field-toggler"
+                                class="block text-sm font-medium text-gray-700">Toggle</label>
+                            <button type="button" id="roof-field-toggler"
+                                class="mt-1 block rounded-md shadow-sm py-2 px-2 mb-2 border-[2px] border-[#9a98bc] sm:text-sm"
+                                onclick="toggleAreaField(this, 'roof')">Area</button>
+                        </div>
                     </div>
-                    <div class="mb-4">
-                        <label for="area-roof" class="block text-sm font-medium text-gray-700">Area (* sq. meter)
-                        </label>
-                        <input type="number" min="0" id="area-roof"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            step="0.1">
-                    </div>
-                    <div class="mb-4">
-                        <label for="temperature-roof" class="block text-sm font-medium text-gray-700">Temperature
-                            (°C)</label>
-                        <input type="number" min="0" id="temperature-roof"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            step="1">
-                    </div>
-                    <button type="button" onclick="CHGRoofs()"
+                    <button type="button" onclick="CHGRoof()"
                         class="w-full bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-600">Calculate</button>
                 </form>
                 <div id="result-roof" class="mt-6 text-center text-lg font-semibold"></div>
@@ -214,13 +276,14 @@
             {% if rights.occupants %}
             <div id="CHGOccupants" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto">
                 <h2 class="text-2xl font-bold mb-6 text-center">Heat Gain from Occupants Calculator</h2>
-                <form id="heatGainForm">
+                <form id="heatGainForm-occupant">
                     <div class="mb-4">
                         <label for="occupants" class="block text-sm font-medium text-gray-700">Number of
                             Occupants</label>
-                        <input type="number" min="0" id="occupants"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            step="1">
+                        <input type="number" min="0" onchange="check(this)" id="occupants"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-[#9a98bc] sm:text-sm"
+                            step="1" value="0">
+                        <span class="text-[red] text-xs font-bold" id="occupants-error"></span>
                     </div>
                     <button type="button" onclick="CHGOccupants()"
                         class="w-full bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-600">Calculate</button>
@@ -233,29 +296,32 @@
             {% if rights.equipments %}
             <div id="CHGEquipments" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto">
                 <h2 class="text-2xl font-bold mb-6 text-center">Heat Gain Through Roof Calculator</h2>
-                <form id="heatGainForm-equipement">
+                <form id="heatGainForm-equipment">
                     <div class="mb-4">
                         <label for="computer-equipment" class="block text-sm font-medium text-gray-700">Number of
                             Computers
                         </label>
-                        <input type="number" min="0" id="computer-equipment"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        <input type="number" min="0" onchange="check(this)" id="computer-equipment"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-[#9a98bc] sm:text-sm"
                             step="1">
+                        <span class="text-[red] text-xs font-bold" id="computer-equipment-error"></span>
                     </div>
                     <div class="mb-4">
                         <label for="fan-equipment" class="block text-sm font-medium text-gray-700">Number of
                             Fans</label>
-                        <input type="number" min="0" id="fan-equipment"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        <input type="number" min="0" onchange="check(this)" id="fan-equipment"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-[#9a98bc] sm:text-sm"
                             step="1">
+                        <span class="text-[red] text-xs font-bold" id="fan-equipment-error"></span>
                     </div>
                     <div class="mb-4">
                         <label for="ledtubelight-equipment" class="block text-sm font-medium text-gray-700">Number of
                             LED Tube Lights
                         </label>
-                        <input type="number" min="0" id="ledtubelight-equipment"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        <input type="number" min="0" onchange="check(this)" id="ledtubelight-equipment"
+                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-[#9a98bc] sm:text-sm"
                             step="1">
+                        <span class="text-[red] text-xs font-bold" id="ledtubelight-equipment-error"></span>
                     </div>
                     <button type="button" onclick="CHGEquipments()"
                         class="w-full bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-600">Calculate</button>
@@ -268,52 +334,60 @@
             <div id="CHGTotal" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto">
                 <h2 class="text-2xl font-bold mb-6 text-center">Total Heat Gain Calculator</h2>
                 <form id="heatGainForm">
-                    <div class="mb-4">
-                        <label for="walls-total" class="block text-sm font-medium text-gray-700">Heat Gain Through Walls
-                            (Qwalls)</label>
-                        <input type="text" id="walls-total"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <div class="flex justify-between gap-4 mb-4">
+                        <div class="mb-4">
+                            <label for="walls-total" class="block text-sm font-medium text-gray-700">Q
+                                <sub>Walls</sub></label>
+                            <input type="text" id="walls-total"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-[#9a98bc] sm:text-sm"
+                                readonly>
+                        </div>
+                        <div class="mb-4">
+                            <label for="window-total" class="block text-sm font-medium text-gray-700">Q
+                                <sub>Window</sub></label>
+                            <input type="text" id="window-total"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-[#9a98bc] sm:text-sm"
+                                readonly>
+                        </div>
                     </div>
-                    <div class="mb-4">
-                        <label for="window-total" class="block text-sm font-medium text-gray-700">Heat Gain Through
-                            Window
-                            (Qwindow)</label>
-                        <input type="text" id="window-total"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <div class="flex justify-between gap-4 mb-4">
+                        <div class="mb-4">
+                            <label for="roof-total" class="block text-sm font-medium text-gray-700">Q
+                                <sub>Roof</sub></label>
+                            <input type="text" id="roof-total"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-[#9a98bc] sm:text-sm"
+                                readonly>
+                        </div>
+                        <div class="mb-4">
+                            <label for="occupants-total" class="block text-sm font-medium text-gray-700">Q
+                                <sub>Occupants</sub></label>
+                            <input type="text" id="occupants-total"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-[#9a98bc] sm:text-sm"
+                                readonly>
+                        </div>
                     </div>
-                    <div class="mb-4">
-                        <label for="roof-total" class="block text-sm font-medium text-gray-700">Heat Gain Through Roof
-                            (Qroof)</label>
-                        <input type="text" id="roof-total"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    </div>
-                    <div class="mb-4">
-                        <label for="occupants-total" class="block text-sm font-medium text-gray-700">Heat Gain from
-                            Occupants
-                            (Qoccupants)</label>
-                        <input type="text" id="occupants-total"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    </div>
-                    <div class="mb-4">
-                        <label for="computers-total" class="block text-sm font-medium text-gray-700">Heat Gain from
-                            Computers
-                            (Qcomputers)</label>
-                        <input type="text" id="computers-total"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    </div>
-                    <div class="mb-4">
-                        <label for="lights-total" class="block text-sm font-medium text-gray-700">Heat Gain from LED
-                            Tube
-                            Lights
-                            (Qlights)</label>
-                        <input type="text" id="lights-total"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    </div>
-                    <div class="mb-4">
-                        <label for="fans-total" class="block text-sm font-medium text-gray-700">Heat Gain from Fans
-                            (Qfans)</label>
-                        <input type="text" id="fans-total"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <div class="flex justify-between gap-3 mb-4">
+                        <div class="mb-4">
+                            <label for="computers-total" class="block text-sm font-medium text-gray-700">Q
+                                <sub>Computers</sub> </label>
+                            <input type="text" id="computers-total"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-[#9a98bc] sm:text-sm"
+                                readonly>
+                        </div>
+                        <div class="mb-4">
+                            <label for="lights-total" class="block text-sm font-medium text-gray-700">
+                                Q <sub>Lights</sub></label>
+                            <input type="text" id="lights-total"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-[#9a98bc] sm:text-sm"
+                                readonly>
+                        </div>
+                        <div class="mb-4">
+                            <label for="fans-total" class="block text-sm font-medium text-gray-700">Q
+                                <sub>Fans</sub></label>
+                            <input type="text" id="fans-total"
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 focus:outline-[#9a98bc] sm:text-sm"
+                                readonly>
+                        </div>
                     </div>
                     <button type="button" onclick="CHGTotal()"
                         class="w-full bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-600">Calculate Total
@@ -331,19 +405,22 @@
 
         let rights = `{{rights.walls}},{{rights.windows}},{{rights.roof}},{{rights.occupants}},{{rights.equipments}},True`
         rights = rights.split(',')
-        console.log(rights)
+        // console.log(rights)
         const forms = ['CHGWalls', 'CHGWindow', 'CHGRoof', 'CHGOccupants', 'CHGEquipments', 'CHGTotal']
         const forms_obj = {}
         const forms_allowed = forms.filter((id, i) => {
             if (rights[i] === 'True') forms_obj[i] = id;
         })
-        console.log(forms_allowed, forms_obj)
-        function formula(x = 0) {
+        // console.log(forms_allowed, forms_obj)
+
+        function formula(button, x = 0) {
             if (rights[x] === 'True') {
                 for (const i of Object.keys(forms_obj)) {
                     document.querySelector(`#${forms[i]}`).style.display = 'none';
+                    changeBtnStatus(i);
                 }
                 document.querySelector(`#${forms_obj[x]}`).style.display = 'block';
+                changeBtnStatus(x, 'active');
                 if (x === 5) {
                     CHGTotal()
                 }
@@ -352,24 +429,129 @@
         formula(Object.keys(forms_obj)[0]);
 
         function check(e) {
-            console.log(e, e.id)
-            if (!e.value) {
+            value = parseFloat(e.value);
+            min = parseFloat(e.min);
+            if (!value) {
                 e.style.outline = '2px solid red';
                 document.getElementById(`${e.id}-error`).innerHTML = "can't be empty";
             }
-            else if (e.value < e.min) {
+            else if (value < min) {
                 e.style.outline = '2px solid red';
-                document.getElementById(`${e.id}-error`).innerHTML = "should be bigger than " + e.min;
+                document.getElementById(`${e.id}-error`).innerHTML = "should be bigger or equal to " + e.min;
             }
-            else if (e.max && e.value > e.max) {
+            else if (e.max && value > parseFloat(e.max)) {
                 e.style.outline = '2px solid red';
                 document.getElementById(`${e.id}-error`).innerHTML = "should be lesser than " + e.max;
             }
             else {
                 e.style.outline = 'none';
                 document.getElementById(`${e.id}-error`).innerHTML = "";
+                return false;
+            }
+            return true;
+        }
+
+        function validateForm(param) {
+            let all_filled = 0;
+            document.querySelectorAll(`#heatGainForm-${param} input[type="number"]`).forEach((elem) => all_filled += check(elem));
+            return all_filled;
+        }
+
+        function validateTogglerForm(param) {
+            let all_filled = 0;
+            document.querySelectorAll(`#heatGainForm-${param} .flex-grow-1 input[type="number"]`).forEach((elem) => all_filled += check(elem));
+
+            const area = document.getElementById(`${param}-area-field`);
+            if (area.style.display === 'block') {
+
+                document.querySelectorAll(`#${param}-area-field input[type="number"]`).forEach((elem) => all_filled += check(elem));
+            }
+            else {
+                document.querySelectorAll(`#${param}-dim-field input[type="number"]`).forEach((elem) => all_filled += check(elem));
+            }
+            return all_filled;
+        }
+
+        function validateWallForm(param = 'wall') {
+            let all_filled = 0;
+            document.querySelectorAll(`#heatGainForm-${param} .flex-grow-1 input[type="number"]`).forEach((elem) => all_filled += check(elem));
+            console.log(all_filled)
+            for (let i = 1; i < 5; i++) {
+                const area = document.getElementById(`${param}-${i}-area-field`);
+                if (area.style.display === 'block') {
+
+                    document.querySelectorAll(`#${param}-${i}-area-field input[type="number"]`).forEach((elem) => all_filled += check(elem));
+                }
+                else {
+                    document.querySelectorAll(`#${param}-${i}-dim-field input[type="number"]`).forEach((elem) => all_filled += check(elem));
+                }
+                console.log(all_filled)
+
+            }
+
+            return all_filled;
+        }
+        function getTogglerFields(param, roof = false) {
+            let fields = {};
+            const area = document.getElementById(`${param}-area-field`);
+            if (area.style.display === 'block') {
+                fields.area = parseFloat(document.getElementById(`area-${param}`).value);
+            }
+            else if (!roof) {
+                fields.height = parseFloat(document.getElementById(`height-${param}`).value);
+                fields.width = parseFloat(document.getElementById(`width-${param}`).value);
+            }
+            else {
+                fields.length = parseFloat(document.getElementById(`length-${param}`).value);
+                fields.breadth = parseFloat(document.getElementById(`breadth-${param}`).value);
+            }
+            return fields
+        }
+
+
+        function changeBtnStatus(i = 0, status = 'any') {
+            button = document.querySelector(`#form${i}btn`)
+            button.classList.remove("active-status-btn");
+
+            switch (status) {
+                case "success":
+                    button.classList.remove("error-status-btn");
+                    button.classList.add("success-status-btn");
+                    break;
+                case "error":
+                    button.classList.remove("success-status-btn");
+                    button.classList.add("error-status-btn");
+                    break;
+                case "active":
+                    button.classList.add("active-status-btn");
+                    break;
+                default:
+                    break;
             }
         }
+
+        function toggleAreaField(btn, id) {
+            const area = document.getElementById(`${id}-area-field`);
+            const dim = document.getElementById(`${id}-dim-field`);
+            const unitofDims = document.getElementById(`${id}-unit-dim`);
+            const unitofArea = document.getElementById(`${id}-unit-area`);
+            if (area.style.display === 'block') {
+                area.style.display = 'none';
+                dim.style.display = 'flex';
+                btn.innerHTML = 'Area';
+                unitofDims.style.display = 'block';
+                unitofArea.style.display = 'none';
+            }
+
+            else {
+                area.style.display = 'block';
+                dim.style.display = 'none';
+                btn.innerHTML = 'Dimension';
+                unitofDims.style.display = 'none';
+                unitofArea.style.display = 'inline';
+            }
+        }
+
     </script>
 </section>
 

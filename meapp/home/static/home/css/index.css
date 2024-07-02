@@ -6,7 +6,7 @@
   font-family: "Poppins", sans-serif;
 }
 
-:root{
+:root {
   --gradient1: linear-gradient(62deg, #f2f2f2 0%, #ebd7ff 100%);
   --gradient2: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
 }
@@ -15,7 +15,7 @@
   width: 100%;
   background-image: var(--gradient1);
 }
-body{
+body {
   background-image: var(--gradient1);
 }
 ::selection {
@@ -216,11 +216,48 @@ form .btn input[type="submit"] {
   width: 55vh;
 }
 
-.password-btn{
+.password-btn {
   position: absolute;
   width: 31px;
   right: 10px;
   top: 10px;
   mix-blend-mode: darken;
   opacity: 0.7;
+}
+
+.status-btn {
+  color: #2300e3;
+  background: white;
+  font-weight: 500;
+  border: 2px solid white;
+  border-top: 1px solid #e2e2e2;
+  border-left: 1px solid #e2e2e2;
+  box-shadow: 2px 2px 4px -1px black;
+  transition: box-shadow 0.2s ease;
+  border-radius: 4px;
+}
+.active-status-btn,
+.error-status-btn,
+.success-status-btn {
+  color: white;
+}
+.active-status-btn {
+  background: #2300e3;
+  border: 2px solid #2300e3;
+}
+.error-status-btn {
+  background: #ff293f;
+  border: 2px solid #ff293f;
+}
+.success-status-btn {
+  background: #009133;
+  border: 2px solid #009133;
+}
+
+.status-btn:active {
+  box-shadow: none !important;
+}
+
+.area-field, .unit-area{
+  display: none;
 }

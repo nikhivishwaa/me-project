@@ -12,6 +12,10 @@ class Wall:
         self.thickness = thickness
         self.temperature_difference = temperature
 
+        for i in (self.area, self.thermal_conductivity, self.thickness):
+            if i < 0:
+                raise ValueError("all values must be positive.")
+
     @property
     def area(self)->float|int:
         if self.height and self.width:
@@ -26,6 +30,8 @@ class Wall:
 
     @property
     def temperature_difference(self)->float|int:
+        if self.temperature < 20:
+            raise ValueError("Temperature must be greater than or equal to 20.")
         return self.temperature - 20
 
     @temperature_difference.setter
@@ -63,8 +69,8 @@ class HeatGainThroughWalls:
     def detailed_heat_gain(self)->dict:
         """return the total heat gain along with calulated heat gain of each 4 walls."""
         detail_data = {
-            'total_heat_gain': f'{self.total_heat_gain: .2f} W',
-            'heat_gain_by_each_wall':  {key:f'{value: .2f} W' for key, value in self.heat_gain_by_each.items()},
+            'total_heat_gain': f'{self.total_heat_gain: .2f} W'.strip(),
+            'heat_gain_by_each_wall':  {key:f'{value: .2f} W'.strip() for key, value in self.heat_gain_by_each.items()},
         }
 
         return detail_data
@@ -110,8 +116,8 @@ class HeatGainThroughWindows:
     def detailed_heat_gain(self)->dict:
         """return the total heat gain along with all windows calulated heat gain"""
         detail_data = {
-            'total_heat_gain': f'{self.total_heat_gain: .2f} W',
-            'heat_gain_by_each_window':  {key:f'{value: .2f} W' for key, value in self.heat_gain_by_each.items()},
+            'total_heat_gain': f'{self.total_heat_gain: .2f} W'.strip(),
+            'heat_gain_by_each_window':  {key:f'{value: .2f} W'.strip() for key, value in self.heat_gain_by_each.items()},
         }
 
         return detail_data
@@ -122,7 +128,13 @@ class HeatGainThroughWindows:
 class HeatGainThroughRoof:
     """calculates the heat gain by the roof of house or workplace."""
     def __init__(self, roof_dict:dict)->None:
-            self.roof = Wall(**roof_dict)
+        if len(roof_dict) and roof_dict.get('area', None) is None:
+            # add area to roof_dict and remove length and breadth
+            roof_dict['area'] = roof_dict['length'] * roof_dict['breadth']
+            roof_dict.pop('length')
+            roof_dict.pop('breadth')
+
+        self.roof = Wall(**roof_dict)
 
     @property
     def total_heat_gain(self)->float:
@@ -165,8 +177,8 @@ class HeatGainFromEquipments:
     def detailed_heat_gain(self)->dict:
         """return the total heat gain along with calulated heat gain by each equipment."""
         detail_data = {
-            'total_heat_gain': f'{self.total_heat_gain: .2f} W',
-            'heat_gain_by_each_equipment':  {key:f'{value: .2f} W' for key, value in self.heat_gain_by_each.items()},
+            'total_heat_gain': f'{self.total_heat_gain: .2f} W'.strip(),
+            'heat_gain_by_each_equipment':  {key:f'{value: .2f} W'.strip() for key, value in self.heat_gain_by_each.items()},
         }
 
         return detail_data
@@ -196,7 +208,7 @@ class TotalHeatLoad:
                 self.detailed_heat_load[source] = self.heat_gain_objects[source].detailed_heat_gain()
 
             else:
-                self.detailed_heat_load[source] = str(self.heat_gain_objects[source]) # getting string representation
+                self.detailed_heat_load[source] = str(self.heat_gain_objects[source]).strip() # getting string representation
 
     def tons_of_airconditioning(self)->str:
         conversion_coefficient = 3517
@@ -240,6 +252,10 @@ class PermissionedTotalHeatLoad(TotalHeatLoad):
                     'air_conditioning': self.tons_of_airconditioning()
                 }
             }
+
+            if self.air_conditioning_required < 0 or self.total_heatload < 0:
+                result['success'], self.success = False, False
+            
             return result
         else:
             result = {
