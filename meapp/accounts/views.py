@@ -14,8 +14,8 @@ import io
 
 User = get_user_model()
 
-from accounts.helpers.validations import SignupDataValidation, ProfileUpdateDataValidation
-from accounts.helpers.utils import otp_helper
+from accounts.helpers.validations import SignupDataValidation, ProfileUpdateDataValidation, PasswordUpdateDataValidation
+from accounts.helpers.utils import otp_helper, forgot_otp_helper
 import json
 
 
@@ -171,3 +171,88 @@ def userauth(request):
 
 
     return render(request, 'accounts/login.html')
+
+def forgotpasswordotp(request):        
+    if request.method == 'POST':
+        email = request.POST.get('email', '').lower()
+        otp = request.POST.get('otp', '')
+        resend = request.POST.get('resend', '')
+
+        if email:
+            user = User.objects.filter(email = email)
+            if user.exists():
+                user = user.first()
+                remaining = 0
+                fresh = True
+                if user.forgot_otp_timestamp is not None:
+                    remaining = 600 - (dt.datetime.now(dt.timezone.utc) - user.forgot_otp_timestamp).seconds
+                    fresh = False
+                if resend == 'resend':
+                    if remaining > 0 and user.forgot_password_otp:
+                        messages.warning(request, f"Wait {round(remaining/60)} more minutes {remaining%60} seconds for new OTP")
+                    else:
+                        forgot_otp_helper(user)
+                        messages.info(request, f"OTP has been {'resent' if user.forgot_password_otp else 'sent'} successfully")
+                    return render(request, 'accounts/forgotpassword.html', context={'email':user.email})
+                
+                elif remaining <= 0:
+                    user.forgot_password_otp = ''
+                    user.save()
+                    messages.error(request, "OTP Expired")
+                    return render(request, 'accounts/forgotpassword.html', context={'email':email})
+
+                elif user.forgot_password_otp == otp:
+                    p_token = f'${user.id}_TS_{dt.datetime.now().timestamp()/rd.randint(111, 5964)}${oct(int(user.phone_number))}' 
+                    user.password_update_token = p_token
+                    user.forgot_password_otp = ''
+                    user.forgot_otp_timestamp = None
+                    user.save()
+                    messages.success(request, "OTP Verified. Now create new password")
+
+                    response = redirect('newpassword')
+                    response.set_cookie('p_token', user.password_update_token, max_age=300, secure=True, httponly=True)
+                    return response
+                else:
+                    messages.error(request, "Invalid OTP")
+                    return render(request, 'accounts/forgotpassword.html', context={'email':email})
+            else:
+                messages.error(request, "Invalid User Email")
+                return redirect('forgotpassword')
+        else:
+            messages.error(request, f"{'OTP' if not otp else 'Email'} is missing")
+            return redirect('forgotpassword')
+
+    return render(request, 'accounts/forgotpassword.html', context={'status': 'resend'})
+
+def newpassword(request):
+    p_token = request.COOKIES.get('p_token', None)
+    print(request.COOKIES)
+    print(p_token)
+    if p_token is not None:
+        if request.method == 'POST':
+            dataval = PasswordUpdateDataValidation(request.POST)
+            if dataval.is_valid():  
+                d = dataval.data          
+                user = User.objects.filter(password_update_token = p_token)
+                if user.exists():
+                    user = user.first()
+                    user.set_password(dataval.password)
+                    user.save()
+                    messages.success(request, "Password Changed Successfully")
+
+                    response = redirect('login')
+                    response.set_cookie('p_token', '', max_age=0, secure=True, httponly=True)
+                    return response
+
+                else:
+                    messages.error(request, "User not exist")           
+                    return render(request, 'accounts/newpassword.html')
+            else:
+                messages.error(request, dataval.errors)
+                return render(request, 'accounts/newpassword.html')
+
+        return render(request, 'accounts/newpassword.html')
+
+    else:   
+        messages.warning(request, "Maximum Time Exceeded. Try again.")
+        return redirect('forgotpassword')

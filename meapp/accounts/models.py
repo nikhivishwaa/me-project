@@ -32,7 +32,10 @@ class CustomUser(AbstractUser):
     last_name = models.CharField(max_length=150, blank=True, validators=[v.validate_last_name])
     verified = models.BooleanField(default=False)
     email_otp = models.CharField(max_length=6,blank=True, null=True)
+    forgot_password_otp = models.CharField(max_length=6, null=True, blank=True)
+    password_update_token = models.CharField(max_length=100, null=True, blank=True)
     otp_timestamp = models.DateTimeField(auto_now_add=True)
+    forgot_otp_timestamp = models.DateTimeField(blank=True, null=True)
     is_restricted = models.BooleanField(default=True)
     calc_access = models.ForeignKey(CalculatorAccessRole, on_delete=models.PROTECT, null=True, blank=True)
 

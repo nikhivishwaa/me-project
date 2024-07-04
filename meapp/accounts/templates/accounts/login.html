@@ -4,10 +4,6 @@
 
 {% block head %}<title>Login: TonnaMatrix features are only be accessible after successful login in to your account</title>{% endblock %}
 
-{% block header %}
-<div class="h-[42px]"></div>
-{% endblock %}
-
 {% block body %}
 <div class="wrapper w-[450px]">
   <div class="title-text">
@@ -48,7 +44,7 @@
           <input type="password" placeholder="Password" name="password" id="password" required>
           <span class="block text-[12px] font-medium py-1 px-[10px] text-[red]" id="password_error"></span>
         </div>
-        <div class="pass-link"><a href="#">Forgot password?</a></div>
+        <div class="pass-link"><a href="/forgotpassword/">Forgot password?</a></div>
         <div class="field btn">
           <div class="btn-layer"></div>
           <input type="submit" value="Login">

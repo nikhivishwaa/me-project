@@ -5,14 +5,25 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
-html,
+
 body {
-  display: grid;
-  height: 100%;
-  width: 100%;
-  place-items: center;
-  /*background-color: #8EC5FC;*/
   background-image: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
+} 
+header{
+  padding: 10px 40px;
+  font-size: 16px;
+}
+header nav{
+  display: inline-block;
+  padding: 6px 12px;
+  padding-left: 7px;
+  border-radius: 6px;
+  box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
+
+main#page-holder{
+  display: flex;
+  justify-content: center;
 }
 ::selection {
   background: #1a75ff;
@@ -32,7 +43,7 @@ body {
 }
 .wrapper .title {
   width: 50%;
-  font-size: 35px;
+  font-size: 24px;
   font-weight: 600;
   text-align: center;
   transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -187,18 +198,6 @@ form .btn input[type="submit"], .resend-btn {
   transition: all 0.4s ease;
 }
 
-#logout {
-  margin-left: 70vh;
-  margin-top: -20px;
-}
-
-#Calculator {
-  border: 2px solid blue;
-  height: 92vh;
-  width: 700px;
-  overflow-y: scroll;
-  scrollbar-width: none;
-}
 .bg-white {
   margin-left: 12vh;
 }
@@ -209,15 +208,6 @@ form .btn input[type="submit"], .resend-btn {
   width: 80px;
   border-radius: 5px;
   margin: 5px;
-}
-#logout {
-  margin-top: -5vh;
-}
-
-#formula5frame,
-#formula1frame {
-  height: 55vh;
-  width: 55vh;
 }
 
 .password-btn{

@@ -43,6 +43,40 @@ class SignupDataValidation:
         return True 
 
 
+class PasswordUpdateDataValidation:
+    def __init__(self, kwargs:dict):
+        self.password = kwargs.get('password', '')
+        self.repassword = kwargs.get('repassword', '')
+        self.errors = []
+        self.data = {}
+        
+    
+    def run_validator(self, data:str, validator)->str:
+        validated_data = data
+        try:
+            validated_data = validator(data)
+        except ValidationError as e:
+            self.errors.append(e)
+        return validated_data
+
+    def is_valid(self):
+        all = self.password + self.repassword 
+        if len(all) == 0:
+            self.errors.append("Please fill all the *required fields")
+            return False
+
+        self.password =  self.run_validator(data = self.password, validator = v.validate_password)
+        
+        if self.password != self.repassword:
+            self.errors.append('Confirm new Password should be same as new password')
+            return False
+
+        if len(self.errors):
+            return False
+
+        return True 
+
+
 class ProfileUpdateDataValidation:
     def __init__(self, kwargs:dict):
         self.phone_number = kwargs.get('phone_number', '')
