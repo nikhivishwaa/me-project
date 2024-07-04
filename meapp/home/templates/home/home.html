@@ -5,24 +5,20 @@
 {% block head %}
 
 <title>TonnaMatrix- Start Your AC Selection With Us</title>
-<!-- <link rel="stylesheet" href="{% static 'home/css/style.css' %}"> -->
-<style>
 
-</style>
 {% endblock %}
 
 {% block body %}
-<section class="w-100 bg-[#f5f5f5] px-5 py-3 pt-2 m-0"><img src="{% static 'home/image/Best-AC.jpg' %}"
-        class="md:w-[75%] md:block md:m-auto" alt="Choose best AC"></section>
+<section class="w-100 bg-[#f5f5f5] px-5 py-3 pt-2 m-0 relative"><img src="{% static 'home/image/Best-AC.jpg' %}"
+                class="md:w-[75%] md:block md:m-auto" alt="Choose best AC">
+        <a href="/calculator"
+                class="decoration-none py-[12px] px-[18px] absolute right-[48%] bottop-[110%] rounded-lg text-[white] font-normal hover:bg-black hover:text-[white] bg-[brown]">Let's
+                Calculate</a>
+</section>
 
-<main class="w-full py-5 flex flex-col items-center gap-y-10">
-    <h1 class="text-4xl font-bold">Discover the Power of TonnaMatrix</h1>
-    <p class="text-lg">Unlock the full potential of your AC with , a revolutionary AC system that combines
-        state-of-the-art energy storage and efficient power conversion.</p>
+<main class="w-full py-5 flex flex-col items-center gap-y-10 bg-[#f5f5f5] m-0" style="padding-top: 87px !important;">
+        <h1 class="text-4xl font-bold">Discover the Power of TonnaMatrix</h1>
+        <p class="text-lg">Unlock the full potential of your AC with , a revolutionary AC system that combines
+                state-of-the-art energy storage and efficient power conversion.</p>
 </main>
-{% endblock %}
-
-{% block script %}
-
-<!-- <script src="{% static 'home/js/script.js' %}"></script> -->
 {% endblock %}

@@ -41,3 +41,36 @@ class SignupDataValidation:
             return False
 
         return True 
+
+
+class ProfileUpdateDataValidation:
+    def __init__(self, kwargs:dict):
+        self.phone_number = kwargs.get('phone_number', '')
+        self.first_name = kwargs.get('first_name', '')
+        self.last_name = kwargs.get('last_name', '')
+        self.errors = []
+        self.data = {}
+        
+    
+    def run_validator(self, data:str, validator)->str:
+        validated_data = data
+        try:
+            validated_data = validator(data)
+        except ValidationError as e:
+            self.errors.append(e)
+        return validated_data
+
+    def is_valid(self):
+        all = self.phone_number + self.first_name + self.last_name
+        if len(all) == 0:
+            self.errors.append("Please fill all the *required fields")
+            return False
+
+        self.data['phone_number'] =  self.run_validator(data = self.phone_number, validator = v.validate_phone_number)
+        self.data['first_name'] =  self.run_validator(data = self.first_name, validator = v.validate_first_name)
+        self.data['last_name'] =  self.run_validator(data = self.last_name, validator = v.validate_last_name)
+
+        if len(self.errors):
+            return False
+
+        return True 

@@ -153,17 +153,33 @@ async function CHGTotal() {
   request_array = { walls, windows, roof, occupants, equipments };
   console.log(request_array);
   response = await getheatload(request_array);
+  let claculated = 0;
+  document
+    .querySelectorAll('#CHGTotal input[type="text"]')
+    .forEach((a) => (a.value !== "0 W" ? claculated++ : ""));
 
-  if (response.success) {
-    total.total = response.data;
-    console.log(total);
-    changeBtnStatus(5, "success");
-    document.getElementById("result").innerHTML = `
+  if (claculated) {
+    if (response.success) {
+      total.total = response.data;
+      console.log(total);
+      TotalTonnageAlert(
+        "success",
+        `You have Required : ${total?.total?.air_conditioning} AC`
+      );
+      changeBtnStatus(5, "success");
+      document.getElementById("result").innerHTML = `
           <p>Total Heat Gain: ${total.total.total_heat_load}</p>
           <p>Tonnage Required: ${total.total.air_conditioning}</p>
       `;
+    } else {
+      changeBtnStatus(5, "error");
+    }
   } else {
     changeBtnStatus(5, "error");
+    TotalTonnageAlert(
+      "warning",
+      `You must Calculate any of Parameter to get Total Result`
+    );
   }
 }
 
@@ -184,4 +200,19 @@ async function getheatload(json_data = {}) {
     console.log(e.message);
     return e.message;
   }
+}
+
+async function TotalTonnageAlert(type, message, secs = 15) {
+  const alert = `<div class="alert alert-${
+    type === "error" ? "danger" : type
+  } alert-dismissible fade show w-100 py-[10px] px-[25px] absolute" role="alert">
+<strong>${type[0].toUpperCase()}${type.slice(1)} : </strong >${message}
+<button type="button" class="close float-right" data-dismiss="alert" aria-label="Close" onclick="this.parentNode.remove(true)">
+  <span aria-hidden="true" class="text-[30px]">&times;</span>
+</button>
+</div >`;
+  const alerts = document.getElementById("alert-area");
+  alerts.innerHTML = alert;
+  const dismiss_alert = alerts.lastChild;
+  // setTimeout(() => dismiss_alert.remove(true), secs * 1000);
 }

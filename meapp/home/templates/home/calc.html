@@ -14,12 +14,14 @@
     <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"
         role="alert">
         <strong>{{ message.tags|capfirst }} :</strong> {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+            onclick="this.parentNode.remove(true)"></button>
     </div>
     {% endfor %}
 </section>
 {% endif %}
 
+<div id="alert-area" class="relative m-0 w-[32%] float-right"></div>
 <section class="flex items-center justify-center min-h-screen mt-2">
     <div class="bg-white shadow-md rounded-lg p-8 w-full max-w-4xl m-0">
         <div class="uper">

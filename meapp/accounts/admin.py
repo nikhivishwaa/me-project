@@ -50,6 +50,6 @@ admin.site.register(CustomUser, CustomUserAdmin)
 
 # admin.site.register(CalculatorAccessRole, CalculatorAccessRoleAdmin)
 
-admin.site.site_title = "CHG site admin (DEV)"
-admin.site.site_header = "CHG administration"
-admin.site.index_title = "Site administration"
+admin.site.site_title = "TonnaMatrix Admin Panel"
+admin.site.site_header = "TonnaMatrix Administration"
+admin.site.index_title = "Site Administration"

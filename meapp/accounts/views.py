@@ -7,10 +7,14 @@ from django.contrib.auth import get_user_model
 import datetime as dt
 import random as rd
 from .models import CalculatorAccessRole
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.parsers import JSONParser
+import io
+
 
 User = get_user_model()
 
-from accounts.helpers.validations import SignupDataValidation
+from accounts.helpers.validations import SignupDataValidation, ProfileUpdateDataValidation
 from accounts.helpers.utils import otp_helper
 import json
 
@@ -99,16 +103,47 @@ def logoutuser(request):
     return redirect('login')
 
 @login_required(login_url="/login")
+@csrf_exempt
 def profile(request):
-    if request.user.is_authenticated:
-        user = {
-                'email' : request.user.email,
-                'firstname' : request.user.first_name,
-                'lastname' : request.user.last_name,
-                'verified' : request.user.verified,
-            }
-        return HttpResponse(json.dumps(user), content_type='application/json')
+    response = {'success': True}
+    if request.method == 'POST':
+        stream = io.BytesIO(request.body)               
+        data = JSONParser().parse(stream)
+        profile = ProfileUpdateDataValidation(data)
+        if profile.is_valid():  
+            d = profile.data          
+            user = request.user
+            print(dir(user))
+            for key, value in d.items():
+                user.__setattr__(key,value)
 
+            user.save()
+            print('updated successfully', user)
+        
+            response = {
+                'success':True,
+                'message': "Profile Updated Successfully",
+                'data':{
+                    'email' : user.email,
+                    'first_name' : user.first_name,
+                    'last_name' : user.last_name,
+                    'verified' : user.verified,
+                    'phone_number' : user.phone_number
+                }
+        }
+        else:
+            response['success'] = False
+            response['message'] = profile.errors
+    else:
+        response['data'] = {
+            'email' : request.user.email,
+            'first_name' : request.user.first_name,
+            'last_name' : request.user.last_name,
+            'verified' : request.user.verified,
+            'phone_number' : request.user.phone_number,
+        }
+
+    return HttpResponse(json.dumps(response), content_type='application/json')
     
 def userauth(request):
     if request.user.is_authenticated:
