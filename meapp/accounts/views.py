@@ -228,8 +228,8 @@ def newpassword(request):
     p_token = request.COOKIES.get('p_token', None)
     print(request.COOKIES)
     print(p_token)
-    if request.method == 'POST':
-        if p_token is not None:
+    if p_token is not None:
+        if request.method == 'POST':
             dataval = PasswordUpdateDataValidation(request.POST)
             if dataval.is_valid():  
                 d = dataval.data          
@@ -251,7 +251,8 @@ def newpassword(request):
                 messages.error(request, dataval.errors)
                 return render(request, 'accounts/newpassword.html')
 
-        return render(request, 'accounts/newpassword.html')
+        else:
+            return render(request, 'accounts/newpassword.html')
 
     # else:   
     #     messages.warning(request, "Maximum Time Exceeded. Try again.")
