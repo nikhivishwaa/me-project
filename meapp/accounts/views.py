@@ -210,7 +210,7 @@ def forgotpasswordotp(request):
                     messages.success(request, "OTP Verified. Now create new password")
 
                     response = redirect('newpassword')
-                    response.set_cookie('p_token', user.password_update_token, max_age=60000, secure=True, httponly=True)
+                    response.set_cookie('p_token', user.password_update_token, max_age=600)
                     return response
                 else:
                     messages.error(request, "Invalid OTP")
@@ -228,8 +228,8 @@ def newpassword(request):
     p_token = request.COOKIES.get('p_token', None)
     print(request.COOKIES)
     print(p_token)
-    if p_token is not None:
-        if request.method == 'POST':
+    if request.method == 'POST':
+        if p_token is not None:
             dataval = PasswordUpdateDataValidation(request.POST)
             if dataval.is_valid():  
                 d = dataval.data          
@@ -241,7 +241,7 @@ def newpassword(request):
                     messages.success(request, "Password Changed Successfully")
 
                     response = redirect('login')
-                    response.set_cookie('p_token', '', max_age=0, secure=True, httponly=True)
+                    response.set_cookie('p_token', '', max_age=0)
                     return response
 
                 else:
@@ -253,6 +253,6 @@ def newpassword(request):
 
         return render(request, 'accounts/newpassword.html')
 
-    else:   
-        messages.warning(request, "Maximum Time Exceeded. Try again.")
-        return redirect('forgotpassword')
+    # else:   
+    #     messages.warning(request, "Maximum Time Exceeded. Try again.")
+    #     return redirect('forgotpassword')
