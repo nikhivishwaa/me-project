@@ -254,6 +254,6 @@ def newpassword(request):
         else:
             return render(request, 'accounts/newpassword.html')
 
-    # else:   
-    #     messages.warning(request, "Maximum Time Exceeded. Try again.")
-    #     return redirect('forgotpassword')
+    else:   
+        messages.warning(request, "Maximum Time Exceeded. Try again.")
+        return redirect('forgotpassword')
