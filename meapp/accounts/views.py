@@ -202,7 +202,7 @@ def forgotpasswordotp(request):
                     return render(request, 'accounts/forgotpassword.html', context={'email':email})
 
                 elif user.forgot_password_otp == otp:
-                    p_token = f'${user.id}_TS_{dt.datetime.now().timestamp()/rd.randint(111, 5964)}${oct(int(user.phone_number))}' 
+                    p_token = f'${user.id}_TS_{dt.datetime.now().timestamp()/rd.randint(111, 5964)}${hex(int(user.phone_number))}' 
                     user.password_update_token = p_token
                     user.forgot_password_otp = ''
                     user.forgot_otp_timestamp = None
@@ -210,7 +210,7 @@ def forgotpasswordotp(request):
                     messages.success(request, "OTP Verified. Now create new password")
 
                     response = redirect('newpassword')
-                    response.set_cookie('p_token', user.password_update_token, max_age=300, secure=True, httponly=True)
+                    response.set_cookie('p_token', user.password_update_token, max_age=60000, secure=True, httponly=True)
                     return response
                 else:
                     messages.error(request, "Invalid OTP")
