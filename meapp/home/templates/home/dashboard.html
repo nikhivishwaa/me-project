@@ -25,16 +25,18 @@
 <div id="alert-area" class="relative m-0"></div>
 {% endif %}
 
-<section class="w-100 bg-[#f5f5f5] px-5 py-3 pt-2 m-0 relative"><img src="{% static 'home/image/Best-AC.jpg' %}"
-    class="md:w-[75%] md:block md:m-auto" alt="Choose best AC">
-  <a href="/calculator"
-    class="decoration-none py-[12px] px-[18px] absolute right-[48%] bottop-[110%] rounded-lg text-[white] font-normal hover:bg-black hover:text-[white] bg-[brown]">Let's
-    Calculate</a>
+<section class="w-100 bg-[#f5f5f5] min-[680px]:px-5 px-1 pt-2 m-0 relative"><img
+    src="{% static 'home/image/Best-AC.jpg' %}" class="md:w-[75%] md:block md:m-auto w-full" alt="Choose best AC">
 </section>
+<div class="w-100 relative bg-[#f5f5f5] flex justify-center">
+  <a href="/calculator"
+    class="decoration-none py-[12px] px-[18px] rounded-lg text-[white] font-normal hover:bg-black hover:text-[white] bg-[brown] max-[700px]:py-[5px] max-[700px]:rounded-[5px] max-[700px]:text-[14px] max-[500px]:py-[4px] max-[500px]:px-[9px] max-[500px]:text-[12px]">Let's
+    Calculate</a>
+</div>
 
-<main class="w-full py-5 flex flex-col items-center gap-y-10 bg-[#f5f5f5] m-0" style="padding-top: 87px !important;">
-  <h1 class="text-4xl font-bold">Discover the Power of TonnaMatrix</h1>
-  <p class="text-lg">Unlock the full potential of your AC with , a revolutionary AC system that combines
+<main class="w-full py-5 pt-[50px] flex flex-col items-center gap-y-10 bg-[#f5f5f5] m-0">
+  <h1 class="text-4xl font-bold max-[700px]:text-2xl  text-center">Discover the Power of TonnaMatrix</h1>
+  <p class="text-lg max-[700px]:text-[15px] text-justify p-[12px]">Unlock the full potential of your AC with , a revolutionary AC system that combines
     state-of-the-art energy storage and efficient power conversion.</p>
 </main>
 {% endblock %}

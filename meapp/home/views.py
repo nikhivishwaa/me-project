@@ -12,7 +12,7 @@ def dashboard(request):
 def landingpage(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
-    return render(request,'home/home.html')
+    return render(request,'home/dashboard.html')
 
 def about(request):
     return render(request,'home/about.html')

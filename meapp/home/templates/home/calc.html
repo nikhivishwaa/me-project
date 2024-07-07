@@ -21,11 +21,12 @@
 </section>
 {% endif %}
 
-<div id="alert-area" class="relative m-0 w-[32%] float-right"></div>
+<div id="alert-area"
+    class="relative m-0 w-[32%] max-[900px]:w-[50%] max-[700px]:w-[70%] max-[429px]:w-[96%] float-right"></div>
 <section class="flex items-center justify-center min-h-screen mt-2">
-    <div class="bg-white shadow-md rounded-lg p-8 w-full max-w-4xl m-0">
-        <div class="uper">
-            <div class="flex gap-4 mb-3">
+    <div class="bg-white shadow-md rounded-lg py-8 min-[429px]:px-8 px-[10px] w-full min-[700px]:max-w-4xl m-0">
+        <div class="uper max-[700px]:overflow-x-scroll">
+            <div class="flex gap-4 mb-3 max-[700px]:pr-2">
                 {% if rights.walls %}
                 <button class="status-btn px-[10px] w-auto" id="form0btn" onclick="formula(this)">Walls</button>
                 {% endif %}
@@ -44,18 +45,20 @@
                 <button class="status-btn px-[10px] w-auto" id="form5btn" onclick="formula(this, 5)">Total</button>
             </div>
         </div>
-        <div id="Calculator" class="bg-gray-100 p-6 rounded-lg shadow-sm  w-100">
+        <div id="Calculator" class="bg-gray-100 py-6 min-[429px]:px-6 px-[10px] rounded-lg shadow-sm  w-100">
 
             <!-- Wall Inputs -->
             {% if rights.walls %}
-            <div id="CHGWalls" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto mt-1 w-100">
-                <h2 class="text-2xl font-bold mb-6 text-center">Heat Gain Through Walls Calculator</h2>
+            <div id="CHGWalls"
+                class="bg-white py-8 min-[429px]:px-8 px-[20px] rounded shadow-md w-full max-w-md mx-auto mt-1 w-100">
+                <h2 class="text-2xl font-bold mb-6 text-center max-[429px]:text-[22px]">Heat Gain Through Walls
+                    Calculator</h2>
                 <form id="heatGainForm-wall">
                     <div id="walls">
                         {% for count in walls_iter %}
                         <div class="wall-input mb-4">
                             <h4 class="font-semibold mb-2">Wall {{count}}</h4>
-                            <div class="flex justify-between gap-3">
+                            <div class="flex justify-between gap-3 max-[537px]:flex-col">
                                 <div class="mb-1 flex-grow-1">
                                     <label for="d-wall-{{count}}"
                                         class="block text-sm font-medium text-gray-700">Thickness <span
@@ -65,7 +68,7 @@
                                         value="0.127" step="0.001" max="0.35" onchange="check(this)">
                                     <span class="text-[red] text-xs font-bold" id="d-wall-{{count}}-error"></span>
                                 </div>
-                                <div id="wall-{{count}}-dim-field" class="flex gap-3">
+                                <div id="wall-{{count}}-dim-field" class="flex gap-3 max-[429px]:flex-col">
                                     <div class="mb-1">
                                         <label for="height-wall-{{count}}"
                                             class="block text-sm font-medium text-gray-700">Height</label>
@@ -101,7 +104,7 @@
                             <span class="block mb-4 text-xs px-2" id="wall-{{count}}-unit-dim"><span
                                     class="font-bold text-[red]">*</span> All 3
                                 dimensions are in Meter</span>
-                            <div class="flex justify-between gap-3">
+                            <div class="flex justify-between min-[429px]:gap-3 max-[429px]:flex-col">
                                 <div class="mb-4 flex-grow-1">
                                     <label for="temperature-wall-{{count}}"
                                         class="block text-sm font-medium text-gray-700">Temperature
@@ -117,7 +120,7 @@
                                     <label for="wall-{{count}}-field-toggler"
                                         class="block text-sm font-medium text-gray-700">Toggle</label>
                                     <button type="button" id="wall-{{count}}-field-toggler"
-                                        class="mt-1 block rounded-md shadow-sm py-2 px-2 mb-2 border-[2px] border-[#9a98bc] sm:text-sm"
+                                        class="mt-1 block rounded-md shadow-sm  mb-2 border-[2px] border-[#9a98bc] sm:text-sm p-[7px] max-[429px]:text-[14px] min-[429px]:py-2 min-[429px]:px-2"
                                         onclick="toggleAreaField(this, 'wall-{{count}}')">Area</button>
                                 </div>
                             </div>
@@ -133,10 +136,12 @@
 
             <!-- CHGWindow -->
             {% if rights.windows %}
-            <div id="CHGWindow" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto">
-                <h2 class="text-2xl font-bold mb-6 text-center">Heat Gain Through Windows Calculator</h2>
+            <div id="CHGWindow"
+                class="bg-white py-8 min-[429px]:px-8 px-[20px] rounded shadow-md w-full max-w-md mx-auto">
+                <h2 class="text-2xl font-bold mb-6 text-center max-[429px]:text-[22px]">Heat Gain Through Windows
+                    Calculator</h2>
                 <form id="heatGainForm-window">
-                    <div class="flex justify-between gap-3">
+                    <div class="flex justify-between gap-3 max-[537px]:flex-col">
                         <div class="mb-1 flex-grow-1">
                             <label for="d-window" class="block text-sm font-medium text-gray-700">Thickness <span
                                     id="window-unit-area" class="unit-area">(in M.)</span></label>
@@ -145,7 +150,7 @@
                                 value="0.004" step="0.001" max="0.10" onchange="check(this)">
                             <span class="text-[red] text-xs font-bold" id="d-window-error"></span>
                         </div>
-                        <div id="window-dim-field" class="flex gap-3">
+                        <div id="window-dim-field" class="flex gap-3 max-[429px]:flex-col">
                             <div class="mb-1">
                                 <label for="height-window"
                                     class="block text-sm font-medium text-gray-700">Height</label>
@@ -177,7 +182,7 @@
                     <span class="block mb-4 text-xs px-2" id="window-unit-dim"><span
                             class="font-bold text-[red]">*</span> All 3
                         dimensions are in Meter</span>
-                    <div class="flex justify-between gap-3">
+                    <div class="flex justify-between min-[429px]:gap-3 max-[429px]:flex-col">
                         <div class="mb-4 flex-grow-1">
                             <label for="temperature-window" class="block text-sm font-medium text-gray-700">Temperature
                                 (°C)</label>
@@ -191,7 +196,7 @@
                             <label for="window-field-toggler"
                                 class="block text-sm font-medium text-gray-700">Toggle</label>
                             <button type="button" id="window-field-toggler"
-                                class="mt-1 block rounded-md shadow-sm py-2 px-2 mb-2 border-[2px] border-[#9a98bc] sm:text-sm"
+                                class="mt-1 block rounded-md shadow-sm mb-2 border-[2px] border-[#9a98bc] sm:text-sm p-[7px] max-[429px]:text-[14px] min-[429px]:py-2 min-[429px]:px-2"
                                 onclick="toggleAreaField(this, 'window')">Area</button>
                         </div>
                     </div>
@@ -205,10 +210,12 @@
 
             <!-- CHGRoof -->
             {% if rights.roof %}
-            <div id="CHGRoof" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto">
-                <h2 class="text-2xl font-bold mb-6 text-center">Heat Gain Through Roof Calculator</h2>
+            <div id="CHGRoof"
+                class="bg-white py-8 min-[429px]:px-8 px-[20px] rounded shadow-md w-full max-w-md mx-auto">
+                <h2 class="text-2xl font-bold mb-6 text-center max-[429px]:text-[22px]">Heat Gain Through Roof
+                    Calculator</h2>
                 <form id="heatGainForm-roof">
-                    <div class="flex justify-between gap-3">
+                    <div class="flex justify-between gap-3 max-[537px]:flex-col">
                         <div class="mb-1 flex-grow-1">
                             <label for="d-roof" class="block text-sm font-medium text-gray-700">Thickness <span
                                     id="roof-unit-area" class="unit-area">(in M.)</span></label>
@@ -217,7 +224,7 @@
                                 value="0.127" step="0.001" max="0.35" onchange="check(this)">
                             <span class="text-[red] text-xs font-bold" id="d-roof-error"></span>
                         </div>
-                        <div id="roof-dim-field" class="flex gap-3">
+                        <div id="roof-dim-field" class="flex gap-3 max-[429px]:flex-col">
                             <div class="mb-1">
                                 <label for="length-roof" class="block text-sm font-medium text-gray-700">Length</label>
                                 <input type="number" min="0" id="length-roof"
@@ -249,7 +256,7 @@
                     <span class="block mb-4 text-xs px-2" id="roof-unit-dim"><span class="font-bold text-[red]">*</span>
                         All 3
                         dimensions are in Meter</span>
-                    <div class="flex justify-between gap-3">
+                    <div class="flex justify-between min-[429px]:gap-3 max-[429px]:flex-col">
                         <div class="mb-4 flex-grow-1">
                             <label for="temperature-roof" class="block text-sm font-medium text-gray-700">Temperature
                                 (°C)</label>
@@ -263,7 +270,7 @@
                             <label for="roof-field-toggler"
                                 class="block text-sm font-medium text-gray-700">Toggle</label>
                             <button type="button" id="roof-field-toggler"
-                                class="mt-1 block rounded-md shadow-sm py-2 px-2 mb-2 border-[2px] border-[#9a98bc] sm:text-sm"
+                                class="mt-1 block rounded-md shadow-sm mb-2 border-[2px] border-[#9a98bc] sm:text-sm p-[7px] max-[429px]:text-[14px] min-[429px]:py-2 min-[429px]:px-2"
                                 onclick="toggleAreaField(this, 'roof')">Area</button>
                         </div>
                     </div>
@@ -276,8 +283,10 @@
 
             <!-- CHGOccupmants -->
             {% if rights.occupants %}
-            <div id="CHGOccupants" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto">
-                <h2 class="text-2xl font-bold mb-6 text-center">Heat Gain from Occupants Calculator</h2>
+            <div id="CHGOccupants"
+                class="bg-white py-8 min-[429px]:px-8 px-[20px] rounded shadow-md w-full max-w-md mx-auto">
+                <h2 class="text-2xl font-bold mb-6 text-center max-[429px]:text-[22px]">Heat Gain from Occupants
+                    Calculator</h2>
                 <form id="heatGainForm-occupant">
                     <div class="mb-4">
                         <label for="occupants" class="block text-sm font-medium text-gray-700">Number of
@@ -296,8 +305,10 @@
 
             <!-- CHGEquipments -->
             {% if rights.equipments %}
-            <div id="CHGEquipments" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto">
-                <h2 class="text-2xl font-bold mb-6 text-center">Heat Gain Through Roof Calculator</h2>
+            <div id="CHGEquipments"
+                class="bg-white py-8 min-[429px]:px-8 px-[20px] rounded shadow-md w-full max-w-md mx-auto">
+                <h2 class="text-2xl font-bold mb-6 text-center max-[429px]:text-[22px]">Heat Gain Through Roof
+                    Calculator</h2>
                 <form id="heatGainForm-equipment">
                     <div class="mb-4">
                         <label for="computer-equipment" class="block text-sm font-medium text-gray-700">Number of
@@ -333,10 +344,11 @@
             {% endif %}
 
             <!-- CHGTotal -->
-            <div id="CHGTotal" class="bg-white p-8 rounded shadow-md w-full max-w-md mx-auto">
-                <h2 class="text-2xl font-bold mb-6 text-center">Total Heat Gain Calculator</h2>
+            <div id="CHGTotal"
+                class="bg-white py-8 min-[429px]:px-8 px-[20px] rounded shadow-md w-full max-w-md mx-auto">
+                <h2 class="text-2xl font-bold mb-6 text-center max-[429px]:text-[22px]">Total Heat Gain Calculator</h2>
                 <form id="heatGainForm">
-                    <div class="flex justify-between gap-4 mb-4">
+                    <div class="flex justify-between min-[400px]:gap-4 max-[400px]:flex-col mb-4">
                         <div class="mb-4">
                             <label for="walls-total" class="block text-sm font-medium text-gray-700">Q
                                 <sub>Walls</sub></label>
@@ -352,7 +364,7 @@
                                 readonly>
                         </div>
                     </div>
-                    <div class="flex justify-between gap-4 mb-4">
+                    <div class="flex justify-between min-[400px]:gap-4 max-[400px]:flex-col mb-4">
                         <div class="mb-4">
                             <label for="roof-total" class="block text-sm font-medium text-gray-700">Q
                                 <sub>Roof</sub></label>
@@ -368,7 +380,7 @@
                                 readonly>
                         </div>
                     </div>
-                    <div class="flex justify-between gap-3 mb-4">
+                    <div class="flex justify-between min-[550px]:gap-3 min-[400px]:gap-2 max-[400px]:flex-col mb-4">
                         <div class="mb-4">
                             <label for="computers-total" class="block text-sm font-medium text-gray-700">Q
                                 <sub>Computers</sub> </label>

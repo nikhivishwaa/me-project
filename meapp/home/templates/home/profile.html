@@ -17,8 +17,8 @@
 {% block body %}
 
 
-<div id="alert-area" class="relative m-0 w-[32%] float-right"></div>
-<div class="container light-style container-p-y" id="profile-section">
+<div id="alert-area" class="relative m-0 w-[100%] min-[460px]:w-[32%] float-right"></div>
+<div class="container light-style container-p-y padding: py-[12px] px-[60px] max-[752px]:p-[22px] min-[980]:w-[80vw] max-[980]:w-[90%] max-[700]:w-[96%]" id="profile-section">
     <h4 class="font-weight-bold py-3 mb-4">
         PROFILE
     </h4>
@@ -61,7 +61,7 @@
                         </div>
                         <hr class="border-light m-0">
                         <div class="card-body">
-                            <div class="flex w-100 gap-4 my-4">
+                            <div class="flex w-100 gap-4 my-4 max-[572px]:flex-col">
                                 <div class="form-group">
                                     <label class="form-label">First Name</label>
                                     <input type="text" class="form-control mb-1" value="{{first_name}}"
@@ -73,11 +73,11 @@
                                     <label class="form-label">Last Name</label>
                                     <input type="text" class="form-control" value="{{last_name}}" name="last_name"
                                         id="last_name" readonly>
+                                    <span class="block text-[12px] font-medium py-1 px-[10px] text-[red]"
+                                        id="last_name_error"></span>
                                 </div>
-                                <span class="block text-[12px] font-medium py-1 px-[10px] text-[red]"
-                                    id="last_name_error"></span>
                             </div>
-                            <div class="flex w-100 gap-4 my-4">
+                            <div class="flex w-100 gap-4 my-4 max-[572px]:flex-col">
                                 <div class="form-group">
                                     <label class="form-label">Phone</label>
                                     <input type="text" class="form-control" value="{{phone_number}}" name="phone_number"
