@@ -53,19 +53,21 @@
                 class="bg-white py-8 min-[429px]:px-8 px-[20px] rounded shadow-md w-full max-w-md mx-auto mt-1 w-100">
                 <h2 class="text-2xl font-bold mb-6 text-center max-[429px]:text-[22px]">Heat Gain Through Walls
                     Calculator</h2>
+
                 <form id="heatGainForm-wall">
                     <div id="walls">
                         {% for count in walls_iter %}
                         <div class="wall-input mb-4">
                             <h4 class="font-semibold mb-2">Wall {{count}}</h4>
-                            <div class="flex justify-between gap-3 max-[537px]:flex-col">
+                            <!-- <div class="flex justify-between gap-3 max-[537px]:flex-col">
                                 <div class="mb-1 flex-grow-1">
                                     <label for="d-wall-{{count}}"
                                         class="block text-sm font-medium text-gray-700">Thickness <span
-                                            id="wall-{{count}}-unit-area" class="unit-area">(in M.)</span></label>
+                                            id="wall-{{count}}-unit-area" class="unit-area">(in <span
+                                                id="window-unit-d">M</span>)</span></label>
                                     <input type="number" min="0" id="d-wall-{{count}}"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
-                                        value="0.127" step="0.001" max="0.35" onchange="check(this)">
+                                        step="0.001" onchange="check(this)">
                                     <span class="text-[red] text-xs font-bold" id="d-wall-{{count}}-error"></span>
                                 </div>
                                 <div id="wall-{{count}}-dim-field" class="flex gap-3 max-[429px]:flex-col">
@@ -93,7 +95,7 @@
                                 <div class="mb-4 area-field" id="wall-{{count}}-area-field">
                                     <label for="area-wall-{{count}}"
                                         class="block text-sm font-medium text-gray-700">Area
-                                        M<sup>2</sup></label>
+                                        <span id="window-unit-a">M</span><sup>2</sup></label>
                                     <input type="number" min="0" id="area-wall-{{count}}"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
                                         step="0.01" onchange="check(this)">
@@ -103,7 +105,7 @@
                             </div>
                             <span class="block mb-4 text-xs px-2" id="wall-{{count}}-unit-dim"><span
                                     class="font-bold text-[red]">*</span> All 3
-                                dimensions are in Meter</span>
+                                dimensions are in <span id="window-unit-all">M</span></span>
                             <div class="flex justify-between min-[429px]:gap-3 max-[429px]:flex-col">
                                 <div class="mb-4 flex-grow-1">
                                     <label for="temperature-wall-{{count}}"
@@ -123,6 +125,134 @@
                                         class="mt-1 block rounded-md shadow-sm  mb-2 border-[2px] border-[#9a98bc] sm:text-sm p-[7px] max-[429px]:text-[14px] min-[429px]:py-2 min-[429px]:px-2"
                                         onclick="toggleAreaField(this, 'wall-{{count}}')">Area</button>
                                 </div>
+                            </div> -->
+                            <div class="flex flex-col justify-between">
+                                <label for="wall-{{count}}-k" class="block text-sm font-medium text-gray-700">Build
+                                    Material</label>
+                                <div class="flex min-[537px]:gap-3 max-[537px]:flex-col mb-4">
+                                    <div class="mt-2 flex gap-1 items-center">
+                                        <input type="radio" name="wall-{{count}}-k" id="wall-{{count}}-k-brick"
+                                            value="brick" checked>
+                                        <label for="wall-{{count}}-k-brick"
+                                            class="block text-[13px] font-medium text-gray-600">Brick</label>
+                                    </div>
+                                    <div class="mt-2 flex gap-1 items-center">
+                                        <input type="radio" name="wall-{{count}}-k" id="wall-{{count}}-k-glass"
+                                            value="glass">
+                                        <label for="wall-{{count}}-k-glass"
+                                            class="block text-[13px] font-medium text-gray-600">Glass</label>
+                                    </div>
+                                    <div class="mt-2 flex gap-1 items-center">
+                                        <input type="radio" name="wall-{{count}}-k" id="wall-{{count}}-k-plywood"
+                                            value="plywood">
+                                        <label for="wall-{{count}}-k-plywood"
+                                            class="block text-[13px] font-medium text-gray-600">Plywood</label>
+                                    </div>
+                                    <div class="mt-2 flex gap-1 items-center">
+                                        <input type="radio" name="wall-{{count}}-k" id="wall-{{count}}-k-wooden"
+                                            value="wooden">
+                                        <label for="wall-{{count}}-k-wooden"
+                                            class="block text-[13px] font-medium text-gray-600">Wooden</label>
+                                    </div>
+                                </div>
+                                <!-- select unit of readings -->
+                                <label for="wall-{{count}}-k" class="block text-sm font-medium text-gray-700">Measuring
+                                    Unit</label>
+                                <div class="flex min-[537px]:gap-3 max-[537px]:flex-col mb-4">
+                                    <div class="mt-2 flex gap-1 items-center">
+                                        <input type="radio" name="wall-{{count}}-unit" onchange="changeUnit(this)"
+                                            id="wall-{{count}}-unit-m" value="M" checked>
+                                        <label for="wall-{{count}}-unit-m"
+                                            class="block text-[13px] font-medium text-gray-600">M</label>
+                                    </div>
+                                    <div class="mt-2 flex gap-1 items-center">
+                                        <input type="radio" name="wall-{{count}}-unit" onchange="changeUnit(this)"
+                                            id="wall-{{count}}-unit-cm" value="CM">
+                                        <label for="wall-{{count}}-unit-cm"
+                                            class="block text-[13px] font-medium text-gray-600">CM</label>
+                                    </div>
+                                    <div class="mt-2 flex gap-1 items-center">
+                                        <input type="radio" name="wall-{{count}}-unit" onchange="changeUnit(this)"
+                                            id="wall-{{count}}-unit-feet" value="Feet">
+                                        <label for="wall-{{count}}-unit-feet"
+                                            class="block text-[13px] font-medium text-gray-600">Feet</label>
+                                    </div>
+                                    <div class="mt-2 flex gap-1 items-center">
+                                        <input type="radio" name="wall-{{count}}-unit" onchange="changeUnit(this)"
+                                            id="wall-{{count}}-unit-inch" value="Inch">
+                                        <label for="wall-{{count}}-unit-inch"
+                                            class="block text-[13px] font-medium text-gray-600">Inch</label>
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-between gap-3 max-[537px]:flex-col">
+                                    <div class="mb-1 flex-grow-1">
+                                        <label for="d-wall-{{count}}"
+                                            class="block text-sm font-medium text-gray-700">Thickness <span
+                                                id="wall-{{count}}-unit-area" class="unit-area">(in <span
+                                                    id="wall-{{count}}-unit-d">M</span>)</span></label>
+                                        <input type="number" min="0" id="d-wall-{{count}}"
+                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
+                                            step="0.001" onchange="check(this)">
+                                        <span class="text-[red] text-xs font-bold" id="d-wall-{{count}}-error"></span>
+                                    </div>
+                                    <div id="wall-{{count}}-dim-field" class="flex gap-3 max-[429px]:flex-col">
+                                        <div class="mb-1">
+                                            <label for="height-wall-{{count}}"
+                                                class="block text-sm font-medium text-gray-700">Height</label>
+                                            <input type="number" min="0" id="height-wall-{{count}}"
+                                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
+                                                step="0.01" onchange="check(this)">
+                                            <span class="text-[red] text-xs font-bold"
+                                                id="height-wall-{{count}}-error"></span>
+
+                                        </div>
+                                        <div class="mb-1">
+                                            <label for="width-wall-{{count}}"
+                                                class="block text-sm font-medium text-gray-700">Width</label>
+                                            <input type="number" min="0" id="width-wall-{{count}}"
+                                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
+                                                step="0.01" onchange="check(this)">
+                                            <span class="text-[red] text-xs font-bold"
+                                                id="width-wall-{{count}}-error"></span>
+
+                                        </div>
+                                    </div>
+                                    <div class="mb-4 area-field" id="wall-{{count}}-area-field">
+                                        <label for="area-wall-{{count}}"
+                                            class="block text-sm font-medium text-gray-700">Area
+                                            <span id="wall-{{count}}-unit-a">M</span><sup>2</sup></label>
+                                        <input type="number" min="0" id="area-wall-{{count}}"
+                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
+                                            step="0.01" onchange="check(this)">
+                                        <span class="text-[red] text-xs font-bold"
+                                            id="area-wall-{{count}}-error"></span>
+
+                                    </div>
+                                </div>
+                                <span class="block mb-4 text-xs px-2" id="wall-{{count}}-unit-dim"><span
+                                        class="font-bold text-[red]">*</span> All 3
+                                    dimensions are in <span id="wall-{{count}}-unit-all">M</span></span>
+                                <div class="flex justify-between min-[429px]:gap-3 max-[429px]:flex-col">
+                                    <div class="mb-4 flex-grow-1">
+                                        <label for="temperature-wall-{{count}}"
+                                            class="block text-sm font-medium text-gray-700">Temperature
+                                            (°C)</label>
+                                        <input type="number" min="20" id="temperature-wall-{{count}}"
+                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm min-w-[90%]"
+                                            step="1" onchange="check(this)">
+                                        <span class="text-[red] text-xs font-bold"
+                                            id="temperature-wall-{{count}}-error"></span>
+
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="wall-{{count}}-field-toggler"
+                                            class="block text-sm font-medium text-gray-700">Toggle</label>
+                                        <button type="button" id="wall-{{count}}-field-toggler"
+                                            class="mt-1 block rounded-md shadow-sm  mb-2 border-[2px] border-[#9a98bc] sm:text-sm p-[7px] max-[429px]:text-[14px] min-[429px]:py-2 min-[429px]:px-2"
+                                            onclick="toggleAreaField(this, 'wall-{{count}}')">Area</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         {% endfor %}
@@ -141,13 +271,61 @@
                 <h2 class="text-2xl font-bold mb-6 text-center max-[429px]:text-[22px]">Heat Gain Through Windows
                     Calculator</h2>
                 <form id="heatGainForm-window">
+                    <div class="flex flex-col justify-between">
+                        <label for="window-k" class="block text-sm font-medium text-gray-700">Build Material</label>
+                        <div class="flex min-[537px]:gap-3 max-[537px]:flex-col mb-4">
+                            <div class="mt-2 flex gap-1 items-center">
+                                <input type="radio" name="window-k" id="window-k-glass" value="glass" checked>
+                                <label for="window-k-glass"
+                                    class="block text-[13px] font-medium text-gray-600">Glass</label>
+                            </div>
+                            <div class="mt-2 flex gap-1 items-center">
+                                <input type="radio" name="window-k" id="window-k-plywood" value="plywood">
+                                <label for="window-k-plywood"
+                                    class="block text-[13px] font-medium text-gray-600">Plywood</label>
+                            </div>
+                            <div class="mt-2 flex gap-1 items-center">
+                                <input type="radio" name="window-k" id="window-k-wooden" value="wooden">
+                                <label for="window-k-wooden"
+                                    class="block text-[13px] font-medium text-gray-600">Wooden</label>
+                            </div>
+                        </div>
+                        <!-- select unit of readings -->
+                        <label for="window-k" class="block text-sm font-medium text-gray-700">Measuring Unit</label>
+                        <div class="flex min-[537px]:gap-3 max-[537px]:flex-col mb-4">
+                            <div class="mt-2 flex gap-1 items-center">
+                                <input type="radio" name="window-unit" onchange="changeUnit(this)" id="window-unit-m"
+                                    value="M" checked>
+                                <label for="window-unit-m" class="block text-[13px] font-medium text-gray-600">M</label>
+                            </div>
+                            <div class="mt-2 flex gap-1 items-center">
+                                <input type="radio" name="window-unit" onchange="changeUnit(this)" id="window-unit-cm"
+                                    value="CM">
+                                <label for="window-unit-cm"
+                                    class="block text-[13px] font-medium text-gray-600">CM</label>
+                            </div>
+                            <div class="mt-2 flex gap-1 items-center">
+                                <input type="radio" name="window-unit" onchange="changeUnit(this)" id="window-unit-feet"
+                                    value="Feet">
+                                <label for="window-unit-feet"
+                                    class="block text-[13px] font-medium text-gray-600">Feet</label>
+                            </div>
+                            <div class="mt-2 flex gap-1 items-center">
+                                <input type="radio" name="window-unit" onchange="changeUnit(this)" id="window-unit-inch"
+                                    value="Inch">
+                                <label for="window-unit-inch"
+                                    class="block text-[13px] font-medium text-gray-600">Inch</label>
+                            </div>
+                        </div>
+                    </div>
                     <div class="flex justify-between gap-3 max-[537px]:flex-col">
                         <div class="mb-1 flex-grow-1">
                             <label for="d-window" class="block text-sm font-medium text-gray-700">Thickness <span
-                                    id="window-unit-area" class="unit-area">(in M.)</span></label>
+                                    id="window-unit-area" class="unit-area">(in <span
+                                        id="window-unit-d">M</span>)</span></label>
                             <input type="number" min="0" id="d-window"
                                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
-                                value="0.004" step="0.001" max="0.10" onchange="check(this)">
+                                step="0.001" onchange="check(this)">
                             <span class="text-[red] text-xs font-bold" id="d-window-error"></span>
                         </div>
                         <div id="window-dim-field" class="flex gap-3 max-[429px]:flex-col">
@@ -171,7 +349,7 @@
                         </div>
                         <div class="mb-4 area-field" id="window-area-field">
                             <label for="area-window" class="block text-sm font-medium text-gray-700">Area
-                                M<sup>2</sup></label>
+                                <span id="window-unit-a">M</span><sup>2</sup></label>
                             <input type="number" min="0" id="area-window"
                                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
                                 step="0.01" onchange="check(this)">
@@ -181,7 +359,7 @@
                     </div>
                     <span class="block mb-4 text-xs px-2" id="window-unit-dim"><span
                             class="font-bold text-[red]">*</span> All 3
-                        dimensions are in Meter</span>
+                        dimensions are in <span id="window-unit-all">M</span></span>
                     <div class="flex justify-between min-[429px]:gap-3 max-[429px]:flex-col">
                         <div class="mb-4 flex-grow-1">
                             <label for="temperature-window" class="block text-sm font-medium text-gray-700">Temperature
@@ -215,13 +393,42 @@
                 <h2 class="text-2xl font-bold mb-6 text-center max-[429px]:text-[22px]">Heat Gain Through Roof
                     Calculator</h2>
                 <form id="heatGainForm-roof">
+                    <div class="flex flex-col justify-between">
+                        <!-- select unit of readings -->
+                        <label for="roof-k" class="block text-sm font-medium text-gray-700">Measuring Unit</label>
+                        <div class="flex min-[537px]:gap-3 max-[537px]:flex-col mb-4">
+                            <div class="mt-2 flex gap-1 items-center">
+                                <input type="radio" name="roof-unit" onchange="changeUnit(this)" id="roof-unit-m"
+                                    value="M" checked>
+                                <label for="roof-unit-m" class="block text-[13px] font-medium text-gray-600">M</label>
+                            </div>
+                            <div class="mt-2 flex gap-1 items-center">
+                                <input type="radio" name="roof-unit" onchange="changeUnit(this)" id="roof-unit-cm"
+                                    value="CM">
+                                <label for="roof-unit-cm" class="block text-[13px] font-medium text-gray-600">CM</label>
+                            </div>
+                            <div class="mt-2 flex gap-1 items-center">
+                                <input type="radio" name="roof-unit" onchange="changeUnit(this)" id="roof-unit-feet"
+                                    value="Feet">
+                                <label for="roof-unit-feet"
+                                    class="block text-[13px] font-medium text-gray-600">Feet</label>
+                            </div>
+                            <div class="mt-2 flex gap-1 items-center">
+                                <input type="radio" name="roof-unit" onchange="changeUnit(this)" id="roof-unit-inch"
+                                    value="Inch">
+                                <label for="roof-unit-inch"
+                                    class="block text-[13px] font-medium text-gray-600">Inch</label>
+                            </div>
+                        </div>
+                    </div>
                     <div class="flex justify-between gap-3 max-[537px]:flex-col">
                         <div class="mb-1 flex-grow-1">
                             <label for="d-roof" class="block text-sm font-medium text-gray-700">Thickness <span
-                                    id="roof-unit-area" class="unit-area">(in M.)</span></label>
+                                    id="roof-unit-area" class="unit-area">(in <span
+                                        id="roof-unit-d">M</span>)</span></label>
                             <input type="number" min="0" id="d-roof"
                                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
-                                value="0.127" step="0.001" max="0.35" onchange="check(this)">
+                                step="0.001" onchange="check(this)">
                             <span class="text-[red] text-xs font-bold" id="d-roof-error"></span>
                         </div>
                         <div id="roof-dim-field" class="flex gap-3 max-[429px]:flex-col">
@@ -245,7 +452,7 @@
                         </div>
                         <div class="mb-4 area-field" id="roof-area-field">
                             <label for="area-roof" class="block text-sm font-medium text-gray-700">Area
-                                M<sup>2</sup></label>
+                                <span id="roof-unit-a">M</span><sup>2</sup></label>
                             <input type="number" min="0" id="area-roof"
                                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 pl-3 pr-2 mb-2 focus:outline-[#9a98bc] sm:text-sm"
                                 step="0.01" onchange="check(this)">
@@ -255,7 +462,7 @@
                     </div>
                     <span class="block mb-4 text-xs px-2" id="roof-unit-dim"><span class="font-bold text-[red]">*</span>
                         All 3
-                        dimensions are in Meter</span>
+                        dimensions are in <span id="roof-unit-all">M</span></span>
                     <div class="flex justify-between min-[429px]:gap-3 max-[429px]:flex-col">
                         <div class="mb-4 flex-grow-1">
                             <label for="temperature-roof" class="block text-sm font-medium text-gray-700">Temperature
@@ -505,19 +712,45 @@
 
             return all_filled;
         }
+        
+        function getUnit(param) {
+            let units = {
+                Inch: 0.0254,
+                Feet: 0.3048,
+                CM: 0.01,
+                M: 1,
+            }
+            try {
+                const unit = document.querySelector(`input[name='${param}-unit']:checked`).value;
+                return units[unit];
+            } catch (error) {
+                return units.M;
+            }
+
+        }
+
+        function changeUnit(unit) {
+            document.getElementById(`${unit.name}-all`).innerHTML = unit.value;
+            document.getElementById(`${unit.name}-a`).innerHTML = unit.value;
+            document.getElementById(`${unit.name}-d`).innerHTML = unit.value;
+        }
         function getTogglerFields(param, roof = false) {
             let fields = {};
             const area = document.getElementById(`${param}-area-field`);
+            const unit = getUnit(param);
+            fields.thickness = parseFloat(
+                document.getElementById(`d-${param}`).value
+            ) * unit;
             if (area.style.display === 'block') {
-                fields.area = parseFloat(document.getElementById(`area-${param}`).value);
+                fields.area = parseFloat(document.getElementById(`area-${param}`).value) * unit;
             }
             else if (!roof) {
-                fields.height = parseFloat(document.getElementById(`height-${param}`).value);
-                fields.width = parseFloat(document.getElementById(`width-${param}`).value);
+                fields.height = parseFloat(document.getElementById(`height-${param}`).value) * unit;
+                fields.width = parseFloat(document.getElementById(`width-${param}`).value) * unit;
             }
             else {
-                fields.length = parseFloat(document.getElementById(`length-${param}`).value);
-                fields.breadth = parseFloat(document.getElementById(`breadth-${param}`).value);
+                fields.length = parseFloat(document.getElementById(`length-${param}`).value) * unit;
+                fields.breadth = parseFloat(document.getElementById(`breadth-${param}`).value) * unit;
             }
             return fields
         }

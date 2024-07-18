@@ -5,21 +5,36 @@ var equipments = {};
 var occupants = 0;
 var roof = {};
 var total = {};
+var conductivity = {
+  brick: 0.3,
+  glass: 1.0,
+  wooden: 0.15,
+  plywood: 0.11,
+};
+
+function getConductivity(param) {
+  let value = document.querySelector(`input[name='${param}-k']:checked`).value;
+  try {
+    return conductivity[value];
+  } catch (e) {
+    console.error(e);
+    return 0;
+  }
+}
 
 async function CHGWalls() {
   const all_filled = validateWallForm("wall");
   if (!all_filled) {
     walls = [];
     for (let i = 1; i < 5; i++) {
-      const thickness = parseFloat(
-        document.getElementById(`d-wall-${i}`).value
-      );
       const temperature = parseFloat(
         document.getElementById(`temperature-wall-${i}`).value
       );
 
       const fields = getTogglerFields(`wall-${i}`);
-      const wallheat = { thickness, temperature, ...fields };
+      const thermal_conductivity =
+        getConductivity(`wall-${i}`) || conductivity["brick"];
+      const wallheat = { thermal_conductivity, temperature, ...fields };
       walls.push(wallheat);
     }
     console.log(walls);
@@ -39,13 +54,14 @@ async function CHGWalls() {
 async function CHGWindows() {
   const all_filled = validateTogglerForm("window");
   if (!all_filled) {
-    const thickness = parseFloat(document.getElementById("d-window").value);
     const temperature = parseFloat(
       document.getElementById("temperature-window").value
     );
 
     const fields = getTogglerFields("window");
-    const windowheat = { thickness, temperature, ...fields };
+    const thermal_conductivity =
+      getConductivity("window") || conductivity["glass"];
+    const windowheat = { thermal_conductivity, temperature, ...fields };
     windows[0] = windowheat;
     console.log(windows);
     response = await getheatload({ windows });
@@ -164,12 +180,13 @@ async function CHGTotal() {
       console.log(total);
       TotalTonnageAlert(
         "success",
-        `You have Required : ${total?.total?.air_conditioning} AC`
+        `You have Required : ${total?.total?.air_conditioning} AC<br><p style="color:grey; font-size: 14px; font-weight: 300;">* 1 % Infilteration added in Total.</p>`
       );
       changeBtnStatus(5, "success");
       document.getElementById("result").innerHTML = `
           <p>Total Heat Gain: ${total.total.total_heat_load}</p>
           <p>Tonnage Required: ${total.total.air_conditioning}</p>
+          <p style="color:grey; font-size: 14px; font-weight: 300;">* 1 % Infilteration added in Total.</p>
       `;
     } else {
       changeBtnStatus(5, "error");

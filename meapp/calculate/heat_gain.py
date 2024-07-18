@@ -82,8 +82,8 @@ class HeatGainThroughWalls:
 class Window(Wall):
     """extends the wall's class funtionality by changing the default values of thermal_conductivity and thickness """
     def __init__(self, **kwargs)->None:
-        kwargs['thermal_conductivity'] = .15
-        kwargs['thickness'] = 0.004
+        # kwargs['thermal_conductivity'] = .15 # default value
+        # kwargs['thickness'] = 0.004
 
         super().__init__(**kwargs)
 
@@ -213,7 +213,8 @@ class TotalHeatLoad:
     def tons_of_airconditioning(self)->str:
         conversion_coefficient = 3517
         self.air_conditioning_required = self.total_heatload / conversion_coefficient
-        result = f"{round(self.air_conditioning_required, 2)} tons"
+        # result = f"{round(self.air_conditioning_required, 2)} tons"
+        result = f"{round(self.air_conditioning_required, 2) + round(self.air_conditioning_required * 0.01, 2)} tons" # adding 1% infilteration
         return result
 
     def __str__(self)->str:
