@@ -1,18 +1,28 @@
 #### Setup the Project
 `Requirements:`<br>
 - `8 GB RAM`<br>
-- `Code Editor VSCode / Pycharm`<br>
-- `Git CLI`<br>
-- `Docker Desktop`<br>
+- `Code Editor` [VSCode](https://code.visualstudio.com/download)<br>
+- `Git CLI` [Download](https://git-scm.com/downloads)<br>
+- `Docker Desktop` [Download](https://www.docker.com/get-started/)<br>
 - `Web Browser Chrome`<br>
 - `python 3.11 or above`<br>
 
+##### Update the name of `.env.example` to `.env` and update the `EMAIL_HOST_USER` & `EMAIL_HOST_PASSWORD`:
+- [Visit](https://myaccount.google.com/apppasswords)
 
 #### Run Project via Docker
+
+###### Step 1: Build
 ```
-docker build -t . tmatrix
+docker build . -t tmatrix
+```
+###### Step 2: Run the Project
+```
+docker run -it --name tonnamatrix --env-file .env -p 8000:8000 tmatrix
 ```
 
+
+#### Run Project Without Docker
 
 ##### Create Virtual Environment for the Project
 ```
