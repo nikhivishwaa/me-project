@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from .manager import CustomUserManager
+from django.contrib.auth.base_user import BaseUserManager
 from django.core.validators import EmailValidator
 from accounts.helpers import validators as v
 import datetime as dt
@@ -22,6 +22,30 @@ class CalculatorAccessRole(models.Model):
         unique_together = ('walls', 'windows', 'roof', 'occupants', 'equipments')
     def __str__(self):
         return self.role_name
+    
+
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, phone_number, password=None, **extra_fields):
+        if not email:
+            raise ValueError('Email address is Required')
+
+        if not phone_number:
+            raise ValueError('Phone Number is Required')
+
+        email = self.normalize_email(email)
+        user = self.model(email=email, phone_number=phone_number, **extra_fields)
+        user.set_password(password)
+        user.save()
+        return user
+        
+    def create_superuser(self, email, phone_number, password=None, **extra_fields):
+        extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('calc_access', CalculatorAccessRole.objects.get(role_name='allowAll'))
+
+        return self.create_user(email, phone_number, password=password,**extra_fields)
 
 
 class CustomUser(AbstractUser):
