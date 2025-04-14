@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 import io
 from django.db.models import Q
-from accounts.models import CustomUser as User, CalculatorAccessRole
+from accounts.models import CustomUser as User, CalculatorAccessRole, create_roles
 from accounts.helpers.validations import SignupDataValidation, ProfileUpdateDataValidation, PasswordUpdateDataValidation
 from accounts.helpers.utils import otp_helper, forgot_otp_helper
 import json
@@ -22,7 +22,7 @@ def register(request):
         if dataval.is_valid():  
             d = dataval.data   
             print(d)       
-            user = User.objects.filter(Q(email = d['email'].lower()) | Q(phone = d['phone']))
+            user = User.objects.filter(Q(email = d['email'].lower()) | Q(phone_number = d['phone_number']))
             if user.exists():
                 messages.error(request, "User already exist")
                 return redirect('login')
@@ -30,9 +30,25 @@ def register(request):
             else:
                 user = User.objects.create_user(**dataval.data)
                 user.set_password(dataval.password)
+                role = CalculatorAccessRole.objects.filter(walls = True, 
+                                                           windows = True, 
+                                                           roof = True, 
+                                                           occupants = True, 
+                                                           equipments = True)
+                
+                if not role.exists():
+                    create_roles()
+                    role = CalculatorAccessRole.objects.filter(walls = True, 
+                                                           windows = True, 
+                                                           roof = True, 
+                                                           occupants = True, 
+                                                           equipments = True)
+                
+                user.calc_access = role.first()
                 user.save()
                 print('registered successfully', user)
                 # otp_helper(user)
+                    
                 messages.success(request, "Account Created")
                 # messages.success(request, "We have sent an OTP to your email for verification")
         
