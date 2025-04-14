@@ -9,6 +9,8 @@
 
 ##### Update the name of `.env.example` to `.env` and update the `EMAIL_HOST_USER` & `EMAIL_HOST_PASSWORD`:
 - [Visit](https://myaccount.google.com/apppasswords)
+  
+##### Create a file `db.sqlite3` in root folder
 
 #### Run Project via Docker
 
