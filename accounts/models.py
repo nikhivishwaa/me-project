@@ -46,3 +46,27 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return f'{self.email} : {self.first_name}'
+    
+
+def create_roles():
+    roles = [
+        {'walls': True, 'windows': True, 'roof': True, 'occupants': True, 'equipments': True, 'role_name': 'allowAll'},
+        {'walls': False, 'windows': False, 'roof': False, 'occupants': False, 'equipments': True, 'role_name': 'allowEquipments'},
+        {'walls': False, 'windows': False, 'roof': False, 'occupants': True, 'equipments': False, 'role_name': 'allowOccupants'},
+        {'walls': False, 'windows': False, 'roof': True, 'occupants': False, 'equipments': False, 'role_name': 'allowRoof'},
+        {'walls': True, 'windows': True, 'roof': True, 'occupants': False, 'equipments': False, 'role_name': 'allowRoom'},
+        {'walls': True, 'windows': False, 'roof': False, 'occupants': False, 'equipments': False, 'role_name': 'allowWalls'},
+        {'walls': True, 'windows': True, 'roof': False, 'occupants': False, 'equipments': False, 'role_name': 'allowWallsAndWindows'},
+        {'walls': False, 'windows': True, 'roof': False, 'occupants': False, 'equipments': False, 'role_name': 'allowWindows'},
+        {'walls': False, 'windows': False, 'roof': False, 'occupants': False, 'equipments': False, 'role_name': 'denyAll'},
+    ]
+
+
+    for i in roles:
+        try:
+            CalculatorAccessRole.objects.get_or_create(**i)
+        except Exception as e:
+            print("failed to create:", i['role_name'])
+
+    else:
+        print("roles initialized")
