@@ -1,3 +1,9 @@
+#### Project Preview
+
+<img src='project_images/home.png' height=380>
+<img src='project_images/login.png' height=380>
+<img src='project_images/calculator.png' height=380>
+
 #### Setup the Project
 `Requirements:`<br>
 - `8 GB RAM`<br>
@@ -6,8 +12,9 @@
 - `python 3.11 or above` [Download](https://www.python.org/downloads/release/python-3110/)<br>
 - `Web Browser Chrome`<br>
 
-##### Update the name of `.env.example` to `.env` and update the `EMAIL_HOST_USER` & `EMAIL_HOST_PASSWORD`:
-- [Visit](https://myaccount.google.com/apppasswords)
+##### Update the file name of `.env.example` to `.env` and update the `EMAIL_HOST_USER` & `EMAIL_HOST_PASSWORD`:
+- Obtain Your App Password from here : [Visit](https://myaccount.google.com/apppasswords)
+- * You can skip the email setting by keeping it as default
 
 ##### Create Virtual Environment for the Project
 ```
@@ -21,7 +28,6 @@ pip install -r requirements.txt
 python manage.py makemigrations
 python manage.py migrate
 python manage.py createroles
-python manage.py collectstatic --no-input
 ```
 
 ###### Database setup is done now Create Admin User
