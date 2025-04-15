@@ -12,19 +12,38 @@
 - `python 3.11 or above` [Download](https://www.python.org/downloads/release/python-3110/)<br>
 - `Web Browser Chrome`<br>
 
+##### Open the Project to `VS Code` or Any `Other IDE`
+
 ##### Update the file name of `.env.example` to `.env` and update the `EMAIL_HOST_USER` & `EMAIL_HOST_PASSWORD`:
 - Obtain Your App Password from here : [Visit](https://myaccount.google.com/apppasswords)
 - * You can skip the email setting by keeping it as default
 
+
+##### Open Integrated Terminal in IDE for running Following Commands
 ##### Create Virtual Environment for the Project
 ```
 python -m venv env
 ```
 
-##### Activate Virtual Enviroment & Prepare Database
+##### Activate Virtual Enviroment
 ```
 .\env\Scripts\activate
+```
+###### InCase if you are getting error in above command so run the following Command in Powershell ISE
+```
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+- Choose `Yes to All`
+- And run the envionment activation commands
+
+
+##### Download the Dependencies
+```
 pip install -r requirements.txt
+```
+
+##### Prepeare DataBase
+```
 python manage.py makemigrations
 python manage.py migrate
 python manage.py createroles
@@ -34,13 +53,6 @@ python manage.py createroles
 ```
 python manage.py createsuperuser
 ```
-
-###### InCase if you are getting error in above command so run the following Command in Powershell ISE
-```
-Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
-- Choose `Yes to All`
-- And run the envionment activation commands
 
 ##### Run the Project
 ```
@@ -53,3 +65,6 @@ python manage.py runserver
 .\env\Scripts\activate
 python manage.py runserver
 ```
+
+##### Visit Project Website: [URL](http://127.0.0.1:8000/)
+##### Visit Project's Live Website: [URL](https://tonnamatrix.nikhivishwa.tech/)
