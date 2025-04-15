@@ -19,7 +19,7 @@ def send_otp_email(user_email, user_name, otp, reason=''):
     html_content = render_to_string('accounts/emailtemplate.html', context)
     text_content = strip_tags(html_content)  
 
-    subject = f'Your One-Time Password (OTP) to {'Verify Email' if not reason else reason}'
+    subject = f"Your One-Time Password (OTP) to {'Verify Email' if not reason else reason}"
     from_email = settings.EMAIL_HOST_USER
     to_email = user_email
     email = EmailMultiAlternatives(subject, text_content, from_email, [to_email])

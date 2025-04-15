@@ -3,8 +3,8 @@
 - `8 GB RAM`<br>
 - `Code Editor` [VSCode](https://code.visualstudio.com/download)<br>
 - `Git CLI` [Download](https://git-scm.com/downloads)<br>
+- `python 3.11 or above` [Download](https://www.python.org/downloads/release/python-3110/)<br>
 - `Web Browser Chrome`<br>
-- `python 3.11 or above`<br>
 
 ##### Update the name of `.env.example` to `.env` and update the `EMAIL_HOST_USER` & `EMAIL_HOST_PASSWORD`:
 - [Visit](https://myaccount.google.com/apppasswords)
@@ -17,6 +17,7 @@ python -m venv env
 ##### Activate Virtual Enviroment & Prepare Database
 ```
 .\env\Scripts\activate
+pip install -r requirements.txt
 python manage.py makemigrations
 python manage.py migrate
 python manage.py createroles
